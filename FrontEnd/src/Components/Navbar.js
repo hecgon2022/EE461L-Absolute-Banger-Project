@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import './Navbar.css';
 import { Link } from 'react-router-dom';
 
 function Navbar() {
+
+    const [click, setClick] = useState(false);
+    const handleClick = () => setClick(!click);
+
     return (
         <>
             <nav className='navbar'>
@@ -10,7 +15,7 @@ function Navbar() {
                         Our Project
                     </Link>
 
-                    <ul>
+                    <ul className={click ? 'nav-menu active' : 'nav-menu'}>
                         <li className='nav-item'>
                             <Link to='/' className='nav-links'>
                                 Home
@@ -31,7 +36,7 @@ function Navbar() {
 
                         <li className='nav-item'>
                             <Link to='/' className='nav-links'>
-                                Sign In
+                                Profile
                             </Link>
                         </li>
                     </ul>
