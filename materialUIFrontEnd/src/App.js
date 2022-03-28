@@ -6,6 +6,7 @@ import Projects from './Pages/Projects';
 import Datasets from './Pages/Datasets';
 import Profile from './Pages/Profile';
 import Layout from './Components/Layout';
+import Login from './Pages/Login';
 
 const theme = createTheme({
 
@@ -23,6 +24,8 @@ function App() {
             <Route exact path="/Projects" element={<Projects />} />
             <Route exact path="/Datasets" element={<Datasets />} />
             <Route exact path="/Profile" element={<Profile />} />
+            
+            <Route exact path="/Login" element={<Login />} />
           </Routes>
         </Layout>
       </Router>
