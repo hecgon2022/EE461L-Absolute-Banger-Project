@@ -1,0 +1,4 @@
+.vertical-container {
+    display: inline;
+    direction: column;
+}

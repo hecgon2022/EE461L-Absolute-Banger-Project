@@ -1,9 +1,13 @@
-import React from 'react'
+import React from 'react';
+import {TextField, Button} from "@material-ui/core";
+import "./Profile.css";
+
 
 export default function Profile() {
   return (
-    <h1>
-      Profile page
-    </h1>
+    <div className='vertical-container'>
+      <h1>Profile</h1>
+    </div>
+    
   );
 }
