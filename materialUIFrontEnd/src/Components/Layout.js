@@ -132,7 +132,7 @@ export default function Layout({ children }) {
                         Today is the {format(new Date(), 'do MMMM Y')}
                     </Typography>
 
-                    <Button component={Link} to="/Profile" variant='outlined' size='Large'>Sign In</Button>
+                    <Button component={Link} to="/LogIn" variant='outlined' size='Large'>Sign In</Button>
 
                 </Toolbar>
             </AppBar >
