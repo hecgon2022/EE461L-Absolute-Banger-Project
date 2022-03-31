@@ -24,7 +24,6 @@ function App() {
             <Route exact path="/Projects" element={<Projects />} />
             <Route exact path="/Datasets" element={<Datasets />} />
             <Route exact path="/Profile" element={<Profile />} />
-
             <Route exact path="/Login" element={<Login />} />
           </Routes>
         </Layout>
