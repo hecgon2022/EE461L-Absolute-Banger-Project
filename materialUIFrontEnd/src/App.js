@@ -10,9 +10,9 @@ import Layout from './Components/Layout';
 import Signup from './Pages/Signup';
 
 const theme = createTheme({
-
-
-
+  typography: {
+    fontFamily: ['Smooch Sans'],
+  }
 })
 
 function App() {

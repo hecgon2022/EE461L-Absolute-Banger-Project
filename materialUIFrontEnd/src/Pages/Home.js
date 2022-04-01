@@ -53,7 +53,7 @@ export default function Home() {
       <Typography
         variant='h6'
         className={classes.credits}>
-        Created by: Hector Gonzalez, John Do, Arya Amin, Kushal Vajrala, Seema Kulkarni, and Tanya Shiram.
+        Created by: Glector Gonzalez, Johnny Dam Do, Uncle Arya Amin, Kushal Vajrala, Seema Kulkarni, and Tanya Shiram.
       </Typography>
 
     </Container >
