@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { TextField, Button, InputAdornment, Typography, makeStyles, Box } from "@material-ui/core";
-import "./Profile.css";
 import axios from "axios"
 import AccountBoxRoundedIcon from '@material-ui/icons/AccountBoxRounded'
 import { VpnKeyRounded } from '@material-ui/icons';
 import ArrowRightRoundedIcon from '@material-ui/icons/ArrowRightRounded';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 
+toast.configure()
 
 const useStyles = makeStyles({
     text: {
@@ -36,7 +38,9 @@ const useStyles = makeStyles({
     },
 })
 
-export default function Signup() {
+
+
+export default function Signup({ setGlobalUser, setLoginStatus }) {
 
     const classes = useStyles()
     const navigate = useNavigate()
@@ -44,6 +48,10 @@ export default function Signup() {
     const [password, setPass] = useState('')
     const [userError, setUserError] = useState(false)
     const [passError, setPassError] = useState(false)
+
+    const notify = () => {
+        toast('You have signed in as ' + username)
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -60,6 +68,12 @@ export default function Signup() {
         }
 
         if (username && password) {
+
+            // Update our user status
+            setGlobalUser(username)
+            setLoginStatus("Log Out")
+            notify()
+
             // do something with form values, and then
             axios.post("https://www.pythonurl.herokuapp.com", {
                 user: username,
@@ -194,7 +208,7 @@ export default function Signup() {
                         Returning User?
                     </Button>
                 </Box>
-            </form>
-        </Box>
+            </form >
+        </Box >
     );
 }

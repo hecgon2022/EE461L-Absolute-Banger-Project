@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { TextField, Button, InputAdornment, Typography, makeStyles, Box } from "@material-ui/core";
-import "./Profile.css";
 import axios from "axios"
 import AccountBoxRoundedIcon from '@material-ui/icons/AccountBoxRounded'
 import { VpnKeyRounded } from '@material-ui/icons';
 import ArrowRightRoundedIcon from '@material-ui/icons/ArrowRightRounded';
 
+toast.configure()
 
 const useStyles = makeStyles({
     text: {
@@ -30,7 +32,7 @@ const useStyles = makeStyles({
     },
 })
 
-export default function Login() {
+export default function Login({ setGlobalUser, setLoginStatus }) {
 
     const classes = useStyles()
     const navigate = useNavigate()
@@ -38,6 +40,11 @@ export default function Login() {
     const [password, setPass] = useState('')
     const [userError, setUserError] = useState(false)
     const [passError, setPassError] = useState(false)
+
+
+    const notify = () => {
+        toast('You have signed in as ' + username)
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -54,6 +61,13 @@ export default function Login() {
         }
 
         if (username && password) {
+
+            // Update our user status
+            setGlobalUser(username)
+            setLoginStatus("Log Out")
+            notify()
+
+
             // do something with form values, and then
             axios.post("https://www.pythonurl.herokuapp.com", {
                 user: username,
@@ -154,7 +168,7 @@ export default function Login() {
                         variant="contained"
                         endIcon={<ArrowRightRoundedIcon fontSize='large' />}
                         style={{ fontSize: 18, maxHeight: 30 }}
-                        onClick={() => navigate('/Signup')}
+                        onClick={() => navigate('/SignUp')}
                     >
                         New User?
                     </Button>

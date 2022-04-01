@@ -1,12 +1,14 @@
 import React from 'react'
-import { Button, AppBar, Toolbar, Typography, Drawer, makeStyles, List, ListItem, ListItemIcon, ListItemText, Container } from '@material-ui/core';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Button, AppBar, Toolbar, Typography, Drawer, makeStyles, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { SubjectOutlined } from '@material-ui/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
-import format from 'date-fns/format';
 import { Link } from 'react-router-dom';
 
 
 const drawerWidth = 240;
+toast.configure()
 
 const useStyles = makeStyles((theme) => {
 
@@ -60,7 +62,7 @@ const useStyles = makeStyles((theme) => {
 
 
 
-export default function Layout({ children }) {
+export default function Layout({ children, user, setUser, loginStatus, setLoginStatus }) {
 
     const classes = useStyles()
     const navigate = useNavigate()
@@ -86,6 +88,21 @@ export default function Layout({ children }) {
         },
 
     ]
+
+    const handleClick = (event) => {
+
+        if (loginStatus === "Log Out") {
+            setUser("Guest")
+            setLoginStatus("Log In")
+            notify()
+        }
+
+
+    }
+
+    const notify = () => {
+        toast(user + ' has logged out')
+    }
 
     return (
         <div className={classes.root}>
@@ -129,10 +146,13 @@ export default function Layout({ children }) {
                         variant='h5'
                         className={classes.date}
                     >
-                        Today is the {format(new Date(), 'do MMMM Y')}
+                        {/* Today is the {format(new Date(), 'do MMMM Y')} */}
+                        Welcome, {user}
                     </Typography>
 
-                    <Button component={Link} to="/LogIn" variant='outlined' size='Large'>Sign In</Button>
+                    <Button onClick={() => handleClick()}
+                        component={Link} to="/LogIn" variant='outlined' size='Large'>{loginStatus}
+                    </Button>
 
                 </Toolbar>
             </AppBar >
