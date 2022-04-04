@@ -16,6 +16,16 @@ const useStyles = makeStyles({
     width: '27%',
     marginLeft: '39%'
   },
+  washImage: {
+    height: '55%',
+    width: '40%',
+    marginLeft: '30%'
+  },
+  cagImage: {
+    height: '47%',
+    width: '32%',
+    marginLeft: '36%'
+  },
 })
 
 export default function Datasets() {
@@ -53,7 +63,7 @@ export default function Datasets() {
       <Grid item xs={6}>
         <Card elevation={2}>
         <CardHeader 
-            title="Cerebral Vasoregulation In Diabetes"
+            title="Cerebral Vasoregulation In Diabetes Database"
             subheader="Published Jan. 30, 2020"
           />
 
@@ -78,13 +88,107 @@ export default function Datasets() {
 
       <Grid item xs={6}>
         <Card elevation={2}>
-          3
+        <CardHeader 
+            title="Wide-Field Calcium Imaging Sleep State Database"
+            subheader="Published Mar. 17, 2022"
+          />
+
+          <CardMedia
+            className={classes.washImage} 
+            component="img"
+            image={require('../Images/washington-logo.png')}
+          />
+
+          <CardContent>
+            <Typography variant="h6" color="textSecondary" >
+            A collection of wide-field calcium imaging (WFCI) sleep and wake recordings collected from twelve 
+            transgenic mice expressing GCaMP6f in excitatory neurons. Each mouse underwent a three-hour 
+            undisturbed WFCI recording session where wake, REM (rapid eye movement) sleep and NREM (non-REM) 
+            sleep was recorded. Each WFCI recording is manually scored by sleep scoring experts in 10-second 
+            epochs as wake, NREM or REM by use of adjunct EEG/EMG. The dataset contains annotated WFCI recordings, 
+            brain mask and the Paxinos atlas used for defining the brain regions. The dataset was collected as 
+            part of a study evaluating a deep learning-based automated sleep state classification method.
+            </Typography>
+          </CardContent>
         </Card>
       </Grid>
 
       <Grid item xs={6}>
         <Card elevation={2}>
-          4
+        <CardHeader 
+            title="UniCA ElectroTastegram Database (PROP)"
+            subheader="Published Jul. 19, 2017"
+          />
+
+          <CardMedia
+            className={classes.cagImage} 
+            component="img"
+            image={require('../Images/cag-logo.jpg')}
+          />
+
+          <CardContent>
+            <Typography variant="h6" color="textSecondary" >
+            The UniCA ElectroTastegram Database (PROP) contains 39 differential biopotential measurements 
+            recorded from the tongues of as many healthy voluntary human subjects (16 males, 23 females, 
+            equally divided into the three PROP taster status classes), during a stimulation with 30uL, 3.2 
+            mmol/L solution of 6-n-propylthiouracil (PROP).
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={6}>
+        <Card elevation={2}>
+        <CardHeader 
+            title="CHB-MIT Scalp EEG Database"
+            subheader="Published Jun. 9, 2010"
+          />
+
+          <CardMedia
+            className={classes.cagImage} 
+            component="img"
+            image={require('../Images/mit-logo.png')}
+          />
+
+          <CardContent>
+            <Typography variant="h6" color="textSecondary" >
+              This database, collected at the Children’s Hospital Boston, consists of EEG recordings from 
+              pediatric subjects with intractable seizures. Subjects were monitored for up to several days 
+              following withdrawal of anti-seizure medication in order to characterize their seizures and 
+              assess their candidacy for surgical intervention.
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={6}>
+        <Card elevation={2}>
+        <CardHeader 
+            title="BIDMC Congestive Heart Failure Database"
+            subheader="Published Oct. 14, 2000"
+          />
+
+          <CardMedia
+            className={classes.bethImage} 
+            component="img"
+            image={require('../Images/beth-logo.png')}
+          />
+
+          <CardContent>
+            <Typography variant="h6" color="textSecondary" >
+            This database includes long-term ECG recordings from 15 subjects (11 men, aged 22 to 71, and 
+            4 women, aged 54 to 63) with severe congestive heart failure (NYHA class 3–4). This group of 
+            subjects was part of a larger study group receiving conventional medical therapy prior to receiving 
+            the oral inotropic agent, milrinone. Further details about the larger study group are available 
+            in the first reference cited above. A number of additional studies have made use of these recordings; 
+            see the additional references below. The individual recordings are each about 20 hours in duration, 
+            and contain two ECG signals each sampled at 250 samples per second with 12-bit resolution over a range 
+            of ±10 millivolts. The original analog recordings were made at Boston's Beth Israel Hospital (now the 
+            Beth Israel Deaconess Medical Center) using ambulatory ECG recorders with a typical recording bandwidth 
+            of approximately 0.1 Hz to 40 Hz. Annotation files (with the suffix .ecg) were prepared using an automated 
+            detector and have not been corrected manually.
+            </Typography>
+          </CardContent>
         </Card>
       </Grid>
     </Grid>
