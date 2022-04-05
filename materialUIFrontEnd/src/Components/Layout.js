@@ -55,7 +55,13 @@ const useStyles = makeStyles((theme) => {
         title:
         {
             padding: theme.spacing(2)
+        },
+
+        loginButton:
+        {
+            color: 'white'
         }
+
     }
 
 })
@@ -151,6 +157,7 @@ export default function Layout({ children, user, setUser, loginStatus, setLoginS
                     </Typography>
 
                     <Button onClick={() => handleClick()}
+                        className = {classes.loginButton}
                         component={Link} to="/LogIn" variant='outlined' size='Large'>{loginStatus}
                     </Button>
 
