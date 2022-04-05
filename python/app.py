@@ -12,14 +12,22 @@ app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb+srv://username:12345678910@tanyasprojects.cj00q.mongodb.net/EE461L_Project?retryWrites=true&w=majority"
 mongo = PyMongo(app)
 
-
-@app.route("/login", methods=["POST"], strict_slashes=False)
+@app.route("/login", methods=["POST", "GET"], strict_slashes=False)
 def log_in():
     user = request.json['user']
     password = request.json['pass']
-    pass_hash = customEncrypt(password, 2, 1)
+    pass_hash = customEncrypt(password, 2, 1) # encrypt the password
     user_doc = {
         "username" : user,
         "password" : pass_hash
     }
-    mongo.db.Users.find(user_doc)
+
+    # see if this is a valid username/password
+    userFound = mongo.db.Users.find(({"username": user}, {"pass_hash": pass_hash}))
+    results = list(userFound)
+
+    if len(results) == 0:
+        print("user not found")
+
+if __name__ == "__main__":
+     app.run(debug=True ,port=5000)
