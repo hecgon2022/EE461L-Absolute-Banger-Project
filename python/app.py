@@ -22,12 +22,19 @@ def log_in():
         "password" : pass_hash
     }
 
+    #return jsonify(user_doc)
+
+    
     # see if this is a valid username/password
-    userFound = mongo.db.Users.find(({"username": user}, {"pass_hash": pass_hash}))
+    userFound = mongo.db.Users.find(user_doc)
     results = list(userFound)
 
     if len(results) == 0:
         print("user not found")
+    else:
+        return jsonify({
+            "message": "User Found"
+        })
 
 if __name__ == "__main__":
      app.run(debug=True ,port=5000)
