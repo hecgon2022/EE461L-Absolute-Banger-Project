@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { TextField, Button, InputAdornment, Typography, makeStyles, Box } from "@material-ui/core";
+import { TextField, Button, InputAdornment, Typography, makeStyles, Box, Grid } from "@material-ui/core";
 import axios from "axios"
 import AccountBoxRoundedIcon from '@material-ui/icons/AccountBoxRounded'
 import { VpnKeyRounded } from '@material-ui/icons';
@@ -185,29 +185,33 @@ export default function Signup({ setGlobalUser, setLoginStatus }) {
                     />
                 </Box>
 
-                <Box id="signup-button/login" alignItems="center" pl={65}>
-                    <Button
-                        id="signup"
-                        className={classes.button}
-                        variant="contained"
-                        type="submit"
-                        endIcon={<ArrowRightRoundedIcon fontSize='large' />}
-                        style={{ fontSize: 18, maxHeight: 30 }}
-                    >
-                        Sign Up
-                    </Button>
-
-                    <Button
-                        id="login"
-                        className={classes.button}
-                        variant="contained"
-                        endIcon={<ArrowRightRoundedIcon fontSize='large' />}
-                        style={{ fontSize: 18, maxHeight: 30 }}
-                        onClick={() => navigate('/Login')}
-                    >
-                        Returning User?
-                    </Button>
-                </Box>
+                <Grid id="signup-button/login" container justify="center" spacing={2}>
+                    <Grid item alignContent='center'>
+                        <Button
+                            id="signup"
+                            className={classes.button}
+                            variant="contained"
+                            type="submit"
+                            endIcon={<ArrowRightRoundedIcon fontSize='large' />}
+                            style={{ fontSize: 18, maxHeight: 30 }}
+                        >
+                            Sign Up
+                        </Button>
+                    </Grid>
+                    
+                    <Grid item alignContent='center'>
+                        <Button
+                            id="login"
+                            className={classes.button}
+                            variant="contained"
+                            endIcon={<ArrowRightRoundedIcon fontSize='large' />}
+                            style={{ fontSize: 18, maxHeight: 30 }}
+                            onClick={() => navigate('/Login')}
+                        >
+                            Returning User?
+                        </Button>
+                    </Grid>
+                </Grid>
             </form >
         </Box >
     );

@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import { Card, CardHeader, CardContent, CardMedia } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core'
 import { Typography } from '@material-ui/core'
+import { Collapse } from '@material-ui/core'
+import { CardActions } from '@material-ui/core'
+import IconButton from '@material-ui/core/IconButton';
+import clsx from 'clsx';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   pzImage: {
     height: '50%',
     width: '33%',
@@ -26,10 +31,26 @@ const useStyles = makeStyles({
     width: '32%',
     marginLeft: '36%'
   },
-})
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+}));
 
 export default function Datasets() {
   const classes = useStyles()
+
+  const [expanded, setExpanded] = useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
 
   return (
     <Grid container spacing={3}>
@@ -57,6 +78,27 @@ export default function Datasets() {
               taken, all the mammals were conscious, and no drugs were administered prior to the recordings.
             </Typography>
           </CardContent>
+
+          <CardActions>
+            <IconButton
+            className={clsx(classes.expand, {
+              [classes.expandOpen]: expanded,
+            })}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          </CardActions>
+
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent>
+              <Typography variant="h1">
+                poop
+              </Typography>
+            </CardContent>
+          </Collapse>
         </Card>
       </Grid>
 

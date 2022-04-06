@@ -12,6 +12,7 @@ import Signup from './Pages/Signup';
 const theme = createTheme({
   typography: {
     fontFamily: ['Smooch Sans'],
+    fontSize: 17,
   }
 })
 
