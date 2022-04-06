@@ -67,17 +67,38 @@ export default function Login({ setGlobalUser, setLoginStatus }) {
             setLoginStatus("Log Out")
             notify()
 
+            const requestOptions = {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
 
-            // do something with form values, and then
-            axios.post("https://www.pythonurl.herokuapp.com", {
-                user: username,
-                pass: password
-            })
-                .then((response) => {
-                    console.log(response);
-                }, (error) => {
-                    console.log(error);
-                });
+                body: JSON.stringify({ "user": username })
+                // body: {
+                //     "user": username,
+                //     "pass": password
+                // }
+            }
+
+            // // do something with form values, and then
+            // axios.post('/login', {
+            //     user: username,
+            //     pass: password
+            // })
+            //     .then((response) => {
+            //         console.log(response);
+            //     }, (error) => {
+            //         console.log(error);
+            //     });
+
+            fetch("/login/", requestOptions)
+                .then(response =>
+                    response.json()
+                )
+                .then(data => {
+                    console.log(data.output)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
             //we have to then return the profile depending on the log in information here.
         }
     }
