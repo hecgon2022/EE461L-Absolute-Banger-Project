@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { TextField, Button, InputAdornment, Typography, makeStyles, Box } from "@material-ui/core";
+import { TextField, Button, InputAdornment, Typography, makeStyles, Box, Grid } from "@material-ui/core";
 import axios from "axios"
 import AccountBoxRoundedIcon from '@material-ui/icons/AccountBoxRounded'
 import { VpnKeyRounded } from '@material-ui/icons';
@@ -171,29 +171,33 @@ export default function Login({ setGlobalUser, setLoginStatus }) {
                     />
                 </Box>
 
-                <Box id="login-button/signup" alignItems="center" pl={65}>
-                    <Button
-                        id="login"
-                        className={classes.button}
-                        variant="contained"
-                        type="submit"
-                        endIcon={<ArrowRightRoundedIcon fontSize='large' />}
-                        style={{ fontSize: 18, maxHeight: 30 }}
-                    >
-                        Login
-                    </Button>
+                <Grid id="login-button/signup" container spacing={2} justify="center">
+                    <Grid item alignContent='center'>
+                        <Button
+                            id="login"
+                            className={classes.button}
+                            variant="contained"
+                            type="submit"
+                            endIcon={<ArrowRightRoundedIcon fontSize='large' />}
+                            style={{ fontSize: 18, maxHeight: 30 }}
+                        >
+                            Login
+                        </Button>
+                    </Grid>
 
-                    <Button
-                        id="signup"
-                        className={classes.button}
-                        variant="contained"
-                        endIcon={<ArrowRightRoundedIcon fontSize='large' />}
-                        style={{ fontSize: 18, maxHeight: 30 }}
-                        onClick={() => navigate('/SignUp')}
-                    >
-                        New User?
-                    </Button>
-                </Box>
+                    <Grid item alignContent='center'>
+                        <Button
+                            id="signup"
+                            className={classes.button}
+                            variant="contained"
+                            endIcon={<ArrowRightRoundedIcon fontSize='large' />}
+                            style={{ fontSize: 18, maxHeight: 30 }}
+                            onClick={() => navigate('/SignUp')}
+                        >
+                            New User?
+                        </Button>
+                    </Grid>
+                </Grid>
             </form>
         </Box>
     );
