@@ -49,8 +49,11 @@ export default function Signup({ setGlobalUser, setLoginStatus }) {
     const [userError, setUserError] = useState(false)
     const [passError, setPassError] = useState(false)
 
-    const notify = () => {
-        toast('You have signed in as ' + username)
+    const notify = (valid) => {
+        if (valid)
+            toast('You have created an account with ' + username)
+        else
+            toast('User already exists')
     }
 
     const handleSubmit = (event) => {
@@ -69,22 +72,32 @@ export default function Signup({ setGlobalUser, setLoginStatus }) {
 
         if (username && password) {
 
-            // Update our user status
-            setGlobalUser(username)
-            setLoginStatus("Log Out")
-            notify()
+            const requestOptions = {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+
+                body: JSON.stringify({ "user": username, "pass": password })
+            }
 
             // do something with form values, and then
-            axios.post("https://www.pythonurl.herokuapp.com", {
-                user: username,
-                pass: password
-            })
-                .then((response) => {
-                    console.log(response);
-                }, (error) => {
-                    console.log(error);
-                });
-            //we have to then return the profile depending on the log in information here.
+            fetch("/signup/", requestOptions)
+                .then(response =>
+                    response.json()
+                )
+                .then(data => {
+                    // console.log(data.output)
+                    if (data.output === "User Found") {
+                        // Update our user status
+                        setGlobalUser(username)
+                        setLoginStatus("Log Out")
+                        notify(true)
+                    } else {
+                        notify(false)
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         }
     }
 

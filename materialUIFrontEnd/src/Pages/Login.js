@@ -70,22 +70,7 @@ export default function Login({ setGlobalUser, setLoginStatus }) {
                 headers: { 'Content-Type': 'application/json' },
 
                 body: JSON.stringify({ "user": username, "pass": password })
-                // body: {
-                //     "user": username,
-                //     "pass": password
-                // }
             }
-
-            // // do something with form values, and then
-            // axios.post('/login', {
-            //     user: username,
-            //     pass: password
-            // })
-            //     .then((response) => {
-            //         console.log(response);
-            //     }, (error) => {
-            //         console.log(error);
-            //     });
 
             fetch("/login/", requestOptions)
                 .then(response =>
