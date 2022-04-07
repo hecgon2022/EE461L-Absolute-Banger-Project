@@ -35,7 +35,6 @@ def log_in():
 
     if len(results) == 0:
         print("user not found")
-        mongo.db.Users.insertOne(user_doc)
         return jsonify(output="User Not Found")
 
     else:
@@ -55,6 +54,32 @@ def log_in():
 def sign_up():
     print("testing")
 
+    user = request.json.get("user") # get the username from the frontend
+    password = request.json.get("pass") # get the password from the frontend
+
+    pass_hash = customEncrypt(password, 2, 1) # encrypt the password
+
+    user_doc = {
+        "username" : user,
+        "password" : pass_hash
+    } 
+
+    userFound = mongo.db.Users.find(user_doc)
+    results = list(userFound)
+
+
+    if len(results) == 0:
+        print("user doesn't exist rn")
+        mongo.db.Users.insertOne(user_doc)
+        return jsonify(output="User Not Found")
+
+    else:
+        print("user exists")
+        return jsonify(output="User Found")
+
+        # return jsonify({
+        #     "message": "User Found"
+        # })
     return jsonify('test')
 
 
