@@ -17,19 +17,15 @@ mongo = PyMongo(app)
 @app.route("/login/", methods=["GET","POST"], strict_slashes=False)
 @cross_origin()
 def log_in():
-    print("testing")
-    print(request)
-    print(request.json.get("user"))
-    return jsonify('test')
 
-    password = request.json['pass']
+    user = request.json.get("user") # get the username from the frontend
+    password = request.json.get("pass") # get the password from the frontend
+
     pass_hash = customEncrypt(password, 2, 1) # encrypt the password
     user_doc = {
         "username" : user,
         "password" : pass_hash
     }
-
-
 
     #return jsonify(user_doc)
 
@@ -40,9 +36,23 @@ def log_in():
     if len(results) == 0:
         print("user not found")
     else:
-        return jsonify({
-            "message": "User Found"
-        })
+        print("user found!")
+        # return jsonify({
+        #     "message": "User Found"
+        # })
+
+    # gotta figure out how to send data back to the frontend and then BOOOOOOOOOOM
+    return jsonify('test') # return something, not sure what to return at the moment
+
+# this is for the signup route, we will do this stuff later
+@app.route("/signup/", methods=["GET","POST"], strict_slashes=False)
+@cross_origin()
+def sign_up():
+    print("testing")
+
+    return jsonify('test')
+
+
 
 if __name__ == "__main__":
      app.run(debug=True ,port=5000)
