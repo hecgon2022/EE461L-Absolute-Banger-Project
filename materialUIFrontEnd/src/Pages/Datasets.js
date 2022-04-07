@@ -9,6 +9,7 @@ import { CardActions } from '@material-ui/core'
 import IconButton from '@material-ui/core/IconButton';
 import clsx from 'clsx';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Button } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   pzImage: {
@@ -50,6 +51,13 @@ export default function Datasets() {
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const onDownload = () => {
+    const link = document.createElement("a");
+    link.download = `data1.zip`;
+    link.href = "https://physionet.org/static/published-projects/physiozoo/physiozoo-mammalian-nsr-databases-1.0.0.zip";
+    link.click();
   };
 
   return (
@@ -97,6 +105,10 @@ export default function Datasets() {
               <Typography variant="h1">
                 poop
               </Typography>
+              
+              <Button onClick={onDownload} variant="contained">
+                Download Link
+              </Button>
             </CardContent>
           </Collapse>
         </Card>
