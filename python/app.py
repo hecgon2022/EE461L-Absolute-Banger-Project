@@ -35,6 +35,7 @@ def log_in():
 
     if len(results) == 0:
         print("user not found")
+        mongo.db.Users.insertOne(user_doc)
         return jsonify(output="User Not Found")
 
     else:
