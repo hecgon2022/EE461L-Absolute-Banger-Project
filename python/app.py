@@ -24,12 +24,7 @@ def log_in():
 
     password = request.json['pass']
     pass_hash = customEncrypt(password, 2, 1) # encrypt the password
-    user_doc = {
-        "username" : user,
-        "password" : pass_hash
-    }
-
-
+    user_doc = User(user, password)
 
     #return jsonify(user_doc)
 
