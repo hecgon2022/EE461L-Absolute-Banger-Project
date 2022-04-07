@@ -35,14 +35,18 @@ def log_in():
 
     if len(results) == 0:
         print("user not found")
+        return jsonify(output="User Not Found")
+
     else:
         print("user found!")
+        return jsonify(output="User Found")
+
         # return jsonify({
         #     "message": "User Found"
         # })
 
     # gotta figure out how to send data back to the frontend and then BOOOOOOOOOOM
-    return jsonify('test') # return something, not sure what to return at the moment
+
 
 # this is for the signup route, we will do this stuff later
 @app.route("/signup/", methods=["GET","POST"], strict_slashes=False)
