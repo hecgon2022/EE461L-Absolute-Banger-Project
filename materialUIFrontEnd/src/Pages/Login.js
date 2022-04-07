@@ -42,8 +42,11 @@ export default function Login({ setGlobalUser, setLoginStatus }) {
     const [passError, setPassError] = useState(false)
     
 
-    const notify = () => {
-        toast('You have signed in as ' + username)
+    const notify = (valid) => {
+        if (valid)
+            toast('You have signed in as ' + username)
+        else
+            toast('Incorrect Credentials')
     }
 
     const handleSubmit = (event) => {
@@ -61,11 +64,6 @@ export default function Login({ setGlobalUser, setLoginStatus }) {
         }
 
         if (username && password) {
-
-            // Update our user status
-            setGlobalUser(username)
-            setLoginStatus("Log Out")
-            notify()
 
             const requestOptions = {
                 method: "POST",
@@ -94,7 +92,15 @@ export default function Login({ setGlobalUser, setLoginStatus }) {
                     response.json()
                 )
                 .then(data => {
-                    console.log(data.output)
+                    // console.log(data.output)
+                    if (data.output === "User Found") {
+                        // Update our user status
+                        setGlobalUser(username)
+                        setLoginStatus("Log Out")
+                        notify(true)
+                    } else {
+                        notify(false)
+                    }
                 })
                 .catch(error => {
                     console.log(error)
