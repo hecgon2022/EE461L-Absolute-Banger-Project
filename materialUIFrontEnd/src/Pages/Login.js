@@ -40,7 +40,7 @@ export default function Login({ setGlobalUser, setLoginStatus }) {
     const [password, setPass] = useState('')
     const [userError, setUserError] = useState(false)
     const [passError, setPassError] = useState(false)
-
+    
 
     const notify = () => {
         toast('You have signed in as ' + username)
@@ -71,7 +71,7 @@ export default function Login({ setGlobalUser, setLoginStatus }) {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
 
-                body: JSON.stringify({ "user": username })
+                body: JSON.stringify({ "user": username, "pass": password })
                 // body: {
                 //     "user": username,
                 //     "pass": password
@@ -111,6 +111,10 @@ export default function Login({ setGlobalUser, setLoginStatus }) {
                     className={classes.text}
                 >
                     Welcome Back!
+                </Typography>
+
+                <Typography id="server-response" variant="h2">
+                    {}
                 </Typography>
             </Box>
 
