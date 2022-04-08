@@ -62,7 +62,7 @@ def sign_up():
     user_doc = {
         "username" : user,
         "password" : pass_hash
-    } 
+    }
 
     userFound = mongo.db.Users.find(user_doc)
     results = list(userFound)
@@ -85,8 +85,6 @@ def sign_up():
 @app.route("/projects/", methods=["GET","POST"], strict_slashes=False)
 @cross_origin()
 def projects():
-<<<<<<< Updated upstream
-=======
 
     ID = request.json.get("projectID") # get the username from the frontend
     description = request.json.get("projectDescription") # get the password from the frontend
@@ -96,14 +94,14 @@ def projects():
     project_doc = {
         "projectID" : ID,
         "projectDescription" : description,
-        "projectFunds": funds 
-    } 
+        "projectFunds": funds
+    }
 
-    projectFound = mongo.db.Projects.find(ID)
+    projectFound = mongo.db.Projects.find(project_doc)
     results = list(projectFound)
 
 
-    if len(results) == 0 and funds > 0:
+    if len(results) == 0 and int(funds) > 0:
         mongo.db.Projects.insert_one(project_doc)
         return jsonify(output="new project")
 
@@ -114,8 +112,7 @@ def projects():
         # return jsonify({
         #     "message": "User Found"
         # })
->>>>>>> Stashed changes
-    
+
     return jsonify('test')
 
 
