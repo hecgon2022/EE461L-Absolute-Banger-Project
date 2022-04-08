@@ -112,11 +112,6 @@ def projects():
         # return jsonify({
         #     "message": "User Found"
         # })
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> origin/main
     return jsonify('test')
 
 
