@@ -50,7 +50,7 @@ const useStyles = makeStyles({
 
 })
 
-export default function Projects() {
+export default function Projects( user ) {
 
   const classes = useStyles()
   const [projectID, setProjectID] = useState('')
@@ -85,7 +85,7 @@ export default function Projects() {
       const requestOptions = {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "projectID": projectID, "projectDescription": projectDescription, "projectFunds": projectFunds })
+        body: JSON.stringify({ "projectID": projectID, "projectDescription": projectDescription, "projectFunds": projectFunds, "user": user })
       }
 
       fetch("/projects/", requestOptions)

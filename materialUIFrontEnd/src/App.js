@@ -27,7 +27,7 @@ function App() {
         <Layout user={currGlobalUser} setUser={setGlobalUser} loginStatus={loginStatus} setLoginStatus={setLoginStatus}>
           <Routes>
             <Route exact path="/" element={<Home />} />
-            <Route exact path="/Projects" element={<Projects />} />
+            <Route exact path="/Projects" element={<Projects user={currGlobalUser} />} />
             <Route exact path="/Datasets" element={<Datasets />} />
             <Route exact path="/Login" element={<Login setGlobalUser={setGlobalUser} setLoginStatus={setLoginStatus} />} />
             <Route exact path="/Signup" element={<Signup setGlobalUser={setGlobalUser} setLoginStatus={setLoginStatus} />} />
