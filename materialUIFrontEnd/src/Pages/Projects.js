@@ -82,7 +82,7 @@ export default function Projects(user) {
       const requestOptions = {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "projectID": projectIDCreate, "projectDescription": projectDescription, "user": user })
+        body: JSON.stringify({ "projectID": projectIDCreate, "projectDescription": projectDescription, "user": user, "type": "create"})
       }
 
       fetch("/projects/", requestOptions)
@@ -121,7 +121,7 @@ export default function Projects(user) {
       const requestOptions = {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "projectID": projectIDJoin, "projectDescription": projectDescription, "user": user })
+        body: JSON.stringify({ "projectID": projectIDJoin, "projectDescription": projectDescription, "user": user, "type": "join" })
       }
 
       fetch("/projects/", requestOptions)

@@ -86,10 +86,11 @@ def sign_up():
 @cross_origin()
 def projects():
 
-    ID = request.json.get("projectID") # get the username from the frontend
-    description = request.json.get("projectDescription") # get the password from the frontend
+    ID = request.json.get("projectID") 
+    description = request.json.get("projectDescription") 
     funds = request.json.get("projectFunds")
-    user = request.json.get("user") # get the username and put this in the list of users associated 
+    user = request.json.get("user") 
+    type = "create"
     
     print(user)
 
@@ -97,7 +98,8 @@ def projects():
         "projectID" : ID,
         "projectDescription" : description,
         "projectFunds": funds,
-        "users": user
+        "users": user,
+        "type": type
     }
     
     projectFound = mongo.db.Projects.find(project_doc)
