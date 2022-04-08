@@ -96,8 +96,9 @@ export default function Projects() {
           // console.log(data.output)
           if (data.output === "User Found") {
             // Update our user status
-          } else {
             
+          } else {
+
           }
         })
         .catch(error => {
