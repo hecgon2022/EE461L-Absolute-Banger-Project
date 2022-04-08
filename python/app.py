@@ -89,8 +89,9 @@ def projects():
     ID = request.json.get("projectID") # get the username from the frontend
     description = request.json.get("projectDescription") # get the password from the frontend
     funds = request.json.get("projectFunds")
-    user = request.json.get("user")
-
+    user = request.json.get("user") # get the username and put this in the list of users associated 
+    
+    print(user)
 
     project_doc = {
         "projectID" : ID,
@@ -98,7 +99,7 @@ def projects():
         "projectFunds": funds,
         "users": user
     }
-
+    
     projectFound = mongo.db.Projects.find(project_doc)
     results = list(projectFound)
 
