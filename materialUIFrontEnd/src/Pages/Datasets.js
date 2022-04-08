@@ -53,10 +53,24 @@ export default function Datasets() {
     setExpanded(!expanded);
   };
 
-  const onDownload = () => {
+  const on1Download = () => {
     const link = document.createElement("a");
     link.download = `data1.zip`;
     link.href = "https://physionet.org/static/published-projects/physiozoo/physiozoo-mammalian-nsr-databases-1.0.0.zip";
+    link.click();
+  };
+
+  const on2Download = () => {
+    const link = document.createElement("a");
+    link.download = `data1.zip`;
+    link.href = "https://physionet.org/static/published-projects/cerebral-vasoreg-diabetes/cerebral-vasoregulation-in-diabetes-1.0.0.zip";
+    link.click();
+  };
+
+  const on4Download = () => {
+    const link = document.createElement("a");
+    link.download = `data1.zip`;
+    link.href = "https://physionet.org/static/published-projects/unicaprop/unica-electrotastegram-database-prop-1.0.0.zip";
     link.click();
   };
 
@@ -76,7 +90,7 @@ export default function Datasets() {
           />
 
           <CardContent>
-            <Typography variant="h6" color="textSecondary" >
+            <Typography variant="h6" color="textSecondary">
               The PhysioZoo database contains electrocardiographic recordings (ECG) 
               taken from multiple types of mammals (dogs, rabbits, mice). Each record is 
               provided in 3 different formats: MATLAB (.mat), simple text (.txt), PhysioNet 
@@ -89,12 +103,12 @@ export default function Datasets() {
 
           <CardActions>
             <IconButton
-            className={clsx(classes.expand, {
-              [classes.expandOpen]: expanded,
-            })}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
             >
               <ExpandMoreIcon />
             </IconButton>
@@ -103,10 +117,10 @@ export default function Datasets() {
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent>
               <Typography variant="h1">
-                poop
+                Metadata 1
               </Typography>
               
-              <Button onClick={onDownload} variant="contained">
+              <Button onClick={on1Download} variant="contained">
                 Download Link
               </Button>
             </CardContent>
@@ -137,6 +151,31 @@ export default function Datasets() {
               pressure, and respiratory parameters, balance, walking, laboratory and retinopathy measures.
             </Typography>
           </CardContent>
+
+          <CardActions>
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          </CardActions>
+
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent>
+              <Typography variant="h1">
+                Metadata 2
+              </Typography>
+              
+              <Button onClick={on2Download} variant="contained">
+                Download Link
+              </Button>
+            </CardContent>
+          </Collapse>
         </Card>
       </Grid>
 
@@ -164,6 +203,31 @@ export default function Datasets() {
             part of a study evaluating a deep learning-based automated sleep state classification method.
             </Typography>
           </CardContent>
+
+          <CardActions>
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          </CardActions>
+
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent>
+              <Typography variant="h1">
+                Metadata 3
+              </Typography>
+              
+              <Button onClick={on2Download} variant="contained">
+                Download Link
+              </Button>
+            </CardContent>
+          </Collapse>
         </Card>
       </Grid>
 
@@ -188,6 +252,31 @@ export default function Datasets() {
             mmol/L solution of 6-n-propylthiouracil (PROP).
             </Typography>
           </CardContent>
+
+          <CardActions>
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          </CardActions>
+
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent>
+              <Typography variant="h1">
+                Metadata 4
+              </Typography>
+              
+              <Button onClick={on4Download} variant="contained">
+                Download Link
+              </Button>
+            </CardContent>
+          </Collapse>
         </Card>
       </Grid>
 
@@ -212,6 +301,31 @@ export default function Datasets() {
               assess their candidacy for surgical intervention.
             </Typography>
           </CardContent>
+
+          <CardActions>
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          </CardActions>
+
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent>
+              <Typography variant="h1">
+                Metadata 3
+              </Typography>
+              
+              <Button onClick={on4Download} variant="contained">
+                Download Link
+              </Button>
+            </CardContent>
+          </Collapse>
         </Card>
       </Grid>
 
