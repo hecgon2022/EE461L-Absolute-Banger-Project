@@ -85,14 +85,7 @@ def sign_up():
 @app.route("/projects/", methods=["GET","POST"], strict_slashes=False)
 @cross_origin()
 def projects():
-
     
-
-
-
-
-
-
     return jsonify('test')
 
 
