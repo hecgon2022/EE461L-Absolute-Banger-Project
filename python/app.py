@@ -70,17 +70,18 @@ def sign_up():
 
     if len(results) == 0:
         print("user doesn't exist rn")
-        mongo.db.Users.insertOne(user_doc)
-        return jsonify(output="User Not Found")
+        mongo.db.Users.insert_one(user_doc)
+        return jsonify(output="User Found")
 
     else:
         print("user exists")
-        return jsonify(output="User Found")
+        return jsonify(output="User Not Found")
 
         # return jsonify({
         #     "message": "User Found"
         # })
     return jsonify('test')
+
 
 
 
