@@ -4,89 +4,85 @@ import 'react-toastify/dist/ReactToastify.css';
 import { TextField, Button, InputAdornment, Typography, makeStyles, Box, Container, Card, CardContent, Grid, Paper } from "@material-ui/core";
 import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 import CardHeader from "@material-ui/core/CardHeader";
-import axios from "axios"
-import AccountBoxRoundedIcon from '@material-ui/icons/AccountBoxRounded'
+import AccountBoxRoundedIcon from '@material-ui/icons/AccountBoxRounded';
 import { VpnKeyRounded } from '@material-ui/icons';
 import ArrowRightRoundedIcon from '@material-ui/icons/ArrowRightRounded';
 
 
 const useStyles = makeStyles({
-  text: {
-    marginTop: 20,
-    marginBottom: 130,
-    display: 'block',
-  },
 
   userField: {
     marginBottom: 10,
+    marginTop: 20,
+    display: 'block',
+  },
+
+  userJoinField: {
+    marginBottom: 30,
+    marginTop: 20,
     display: 'block',
   },
 
   passwordField: {
-    marginBottom: 10,
-    display: 'block',
-  },
-
-  fundsField: {
-    marginBottom: 45,
+    marginBottom: 30,
     display: 'block',
   },
 
   button: {
     borderRadius: 10,
+    marginBottom: 50,
   },
 
   createForm: {
-    maxHeight: 400,
+    maxHeight: 800,
   },
 
   grid: {
-    marginTop: 50,
+    marginTop: 20,
   },
 
   projectTable: {
     display: "block",
     maxHeight: 500,
-  }
+  },
+
+  titles: {
+    display: "block",
+  },
 
 })
 
-export default function Projects( user ) {
+export default function Projects(user) {
 
   const classes = useStyles()
-  const [projectID, setProjectID] = useState('')
+  const [projectIDCreate, setProjectIDCreate] = useState('')
+  const [projectIDJoin, setProjectIDJoin] = useState('')
   const [projectDescription, setProjectDescription] = useState('')
-  const [projectFunds, setProjectFunds] = useState('')
-  const [projectIDError, setProjectIDError] = useState(false)
+  const [projectIDCreateError, setProjectIDCreateError] = useState(false)
+  const [projectIDJoinError, setProjectIDJoinError] = useState(false)
   const [projectDescriptionError, setProjectDescriptionError] = useState(false)
-  const [projectFundsError, setProjectFundsError] = useState(false)
 
 
-  const handleSubmit = (event) => {
+  const handleSubmitCreate = (event) => {
     event.preventDefault();
 
-    setProjectIDError(false)
+    setProjectIDJoinError(false)
     setProjectDescriptionError(false)
-    setProjectFundsError(false)
 
-    if (projectID === '') {
-      setProjectIDError(true)
+    if (projectIDCreate === '') {
+      setProjectIDCreateError(true)
     }
 
     if (projectDescription === '') {
       setProjectDescriptionError(true)
     }
 
-    if (projectFunds === '') {
-      setProjectFundsError(true)
-    }
-
-    if (projectID && projectDescription && projectFunds) {
+    if (projectIDCreate && projectDescription) {
 
       const requestOptions = {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "projectID": projectID, "projectDescription": projectDescription, "projectFunds": projectFunds, "user": user })
+        body: JSON.stringify({ "projectID": projectIDCreate, "projectDescription": projectDescription, "user": user })
       }
 
       fetch("/projects/", requestOptions)
@@ -97,7 +93,46 @@ export default function Projects( user ) {
           // console.log(data.output)
           if (data.output === "User Found") {
             // Update our user status
-            
+
+          } else {
+
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+
+      //we have to then return the profile depending on the log in information here.
+      //this is the end of the if statement
+    }
+  }
+
+  const handleSubmitJoin = (event) => {
+    event.preventDefault();
+
+    setProjectIDJoinError(false)
+
+    if (projectIDJoin === '') {
+      setProjectIDCreateError(true)
+    }
+
+    if (projectIDJoin) {
+
+      const requestOptions = {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ "projectID": projectIDJoin, "projectDescription": projectDescription, "user": user })
+      }
+
+      fetch("/projects/", requestOptions)
+        .then(response =>
+          response.json()
+        )
+        .then(data => {
+          // console.log(data.output)
+          if (data.output === "User Found") {
+            // Update our user status
+
           } else {
 
           }
@@ -114,36 +149,32 @@ export default function Projects( user ) {
   return (
 
     <Container>
-
-      <Typography
-        variant='h2'>
-        Projects Page
-      </Typography>
-
       <Grid container spacing={1} className={classes.grid}>
 
         <Grid item xs={6} md={4} className={classes.createForm}>
           <Box className={classes.createForm}>
             <Card elevation={1} className={classes.createForm}>
 
-              <CardHeader
-                title={
-                  <Typography
-                    variant='h4'
-                    classname={classes.formHeader}>
-                    Create New Project
-                  </Typography>}
-              />
+              <CardHeader>
+                title={<div></div>}
+              </CardHeader>
 
               <CardContent>
-                <form noValidate autoComplete='off' onSubmit={handleSubmit}>
+
+                <Typography
+                  variant='h4'
+                  classname={classes.titles}>
+                  Create New Project
+                </Typography>
+
+                <form noValidate autoComplete='off' onSubmit={handleSubmitCreate}>
                   <Box id="projectID-input">
                     <TextField
                       className={classes.userField}
                       label="Project ID"
                       color="secondary"
                       onChange={
-                        (e) => setProjectID(e.target.value)
+                        (e) => setProjectIDCreate(e.target.value)
                       }
                       InputProps={{
                         startAdornment: (
@@ -160,7 +191,7 @@ export default function Projects( user ) {
                       }}
                       required
                       fullWidth
-                      error={projectIDError}
+                      error={projectIDCreateError}
                     />
                   </Box>
 
@@ -192,18 +223,39 @@ export default function Projects( user ) {
                     />
                   </Box>
 
-                  <Box id="funds-input">
+                  <Box id="login-button/signup">
+                    <Button
+                      id="Create Project"
+                      className={classes.button}
+                      variant="contained"
+                      type="submit"
+                      endIcon={<ArrowRightRoundedIcon fontSize='large' />}
+                      style={{ fontSize: 18, maxHeight: 30 }}
+                    >
+                      Create
+                    </Button>
+                  </Box>
+                </form>
+
+                <Typography
+                  variant='h4'
+                  classname={classes.titles}>
+                  Join a Project
+                </Typography>
+
+                <form noValidate autoComplete='off' onSubmit={handleSubmitJoin}>
+                  <Box id="projectID-input">
                     <TextField
-                      className={classes.fundsField}
-                      label="Funds"
+                      className={classes.userJoinField}
+                      label="Project ID"
                       color="secondary"
                       onChange={
-                        (e) => setProjectFunds(e.target.value)
+                        (e) => setProjectIDJoin(e.target.value)
                       }
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
-                            <VpnKeyRounded />
+                            <AccountBoxRoundedIcon />
                           </InputAdornment>
                         ),
                         style: {
@@ -213,10 +265,9 @@ export default function Projects( user ) {
                       InputLabelProps={{
                         style: { fontSize: 22 }
                       }}
-                      autoComplete="current-funds"
                       required
                       fullWidth
-                      error={projectFundsError}
+                      error={projectIDJoinError}
                     />
                   </Box>
 
