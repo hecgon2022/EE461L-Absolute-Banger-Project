@@ -82,18 +82,30 @@ export default function Projects() {
 
     if (projectID && projectDescription && projectFunds) {
 
-      // do something with form values, and then
-      axios.post("https://www.pythonurl.herokuapp.com", {
-        projectID: projectID,
-        projectDescription: projectDescription,
-        projectFunds, projectFunds
-      })
-        .then((response) => {
-          console.log(response);
-        }, (error) => {
-          console.log(error);
-        });
+      const requestOptions = {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ "projectID": projectID, "projectDescription": projectDescription, "projectFunds": projectFunds })
+      }
+
+      fetch("/projects/", requestOptions)
+        .then(response =>
+          response.json()
+        )
+        .then(data => {
+          // console.log(data.output)
+          if (data.output === "User Found") {
+            // Update our user status
+          } else {
+            
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+
       //we have to then return the profile depending on the log in information here.
+      //this is the end of the if statement
     }
   }
 

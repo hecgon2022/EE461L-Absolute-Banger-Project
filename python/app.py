@@ -70,18 +70,53 @@ def sign_up():
 
     if len(results) == 0:
         print("user doesn't exist rn")
-        mongo.db.Users.insertOne(user_doc)
-        return jsonify(output="User Not Found")
+        mongo.db.Users.insert_one(user_doc)
+        return jsonify(output="User Found")
 
     else:
         print("user exists")
-        return jsonify(output="User Found")
+        return jsonify(output="User Not Found")
 
         # return jsonify({
         #     "message": "User Found"
         # })
     return jsonify('test')
 
+@app.route("/projects/", methods=["GET","POST"], strict_slashes=False)
+@cross_origin()
+def projects():
+<<<<<<< Updated upstream
+=======
+
+    ID = request.json.get("projectID") # get the username from the frontend
+    description = request.json.get("projectDescription") # get the password from the frontend
+    funds = request.json.get("projectFunds")
+
+
+    project_doc = {
+        "projectID" : ID,
+        "projectDescription" : description,
+        "projectFunds": funds 
+    } 
+
+    projectFound = mongo.db.Projects.find(ID)
+    results = list(projectFound)
+
+
+    if len(results) == 0 and funds > 0:
+        mongo.db.Projects.insert_one(project_doc)
+        return jsonify(output="new project")
+
+    else:
+        print("project exists")
+        return jsonify(output="project invalid")
+
+        # return jsonify({
+        #     "message": "User Found"
+        # })
+>>>>>>> Stashed changes
+    
+    return jsonify('test')
 
 
 if __name__ == "__main__":
