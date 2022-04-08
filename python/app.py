@@ -85,8 +85,6 @@ def sign_up():
 @app.route("/projects/", methods=["GET","POST"], strict_slashes=False)
 @cross_origin()
 def projects():
-<<<<<<< Updated upstream
-=======
 
     ID = request.json.get("projectID") # get the username from the frontend
     description = request.json.get("projectDescription") # get the password from the frontend
@@ -114,7 +112,6 @@ def projects():
         # return jsonify({
         #     "message": "User Found"
         # })
->>>>>>> Stashed changes
     
     return jsonify('test')
 
