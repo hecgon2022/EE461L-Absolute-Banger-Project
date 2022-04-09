@@ -99,7 +99,7 @@ def projects():
         "users": user
     }
 
-    projectFound = mongo.db.Projects.find(project_doc)
+    projectFound = mongo.db.Projects.find({"projectID":projectID})
     results = list(projectFound)
 
     if project_type == "create":

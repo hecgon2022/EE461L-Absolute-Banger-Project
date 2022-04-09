@@ -81,7 +81,7 @@ export default function Projects(user) {
       setProjectDescriptionError(true)
     }
 
-    if (projectIDCreate && projectDescription) {
+    if (projectIDCreate && projectDescription && user.user !== "Guest") {
 
       const requestOptions = {
         method: "POST",
@@ -109,6 +109,8 @@ export default function Projects(user) {
 
       //we have to then return the profile depending on the log in information here.
       //this is the end of the if statement
+    } else {
+      toast("You must be logged in to create.")
     }
   }
 
@@ -121,8 +123,8 @@ export default function Projects(user) {
       setProjectIDCreateError(true)
     }
 
-    if (projectIDJoin) {
-
+    if (projectIDJoin && user.user !== "Guest") {
+      console.log(user)
       const requestOptions = {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
@@ -150,6 +152,8 @@ export default function Projects(user) {
 
       //we have to then return the profile depending on the log in information here.
       //this is the end of the if statement
+    } else {
+      toast("You must be logged in to join.")
     }
   }
 
