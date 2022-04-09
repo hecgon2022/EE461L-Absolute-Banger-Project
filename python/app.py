@@ -86,33 +86,40 @@ def sign_up():
 @cross_origin()
 def projects():
 
-    ID = request.json.get("projectID") 
+    projectID = request.json.get("projectID") 
     description = request.json.get("projectDescription") 
-    funds = request.json.get("projectFunds")
+    #funds = request.json.get("projectFunds")
     user = request.json.get("user") 
-    type = "create"
-    
-    print(user)
+    project_type = request.json.get("project_type")
 
     project_doc = {
-        "projectID" : ID,
+        "projectID" : projectID,
         "projectDescription" : description,
-        "projectFunds": funds,
-        "users": user,
-        "type": type
+        #"projectFunds": funds,
+        "users": user
     }
-    
+
     projectFound = mongo.db.Projects.find(project_doc)
     results = list(projectFound)
 
+    if project_type == "create":
+        if len(results) == 0:
+            mongo.db.Projects.insert_one(project_doc)
+            return jsonify(output="new project")
+        else:
+            print("project exists")
+            return jsonify(output="project invalid")
+    elif project_type == "join":
+        if len(results) == 0:
+            #mongo.db.Projects.insert_one(project_doc)
+            return jsonify(output="project doesn't exist")
+        else:
+            #print("project exists")
+            return jsonify(output="project exists")
 
-    if len(results) == 0 and int(funds) > 0:
-        mongo.db.Projects.insert_one(project_doc)
-        return jsonify(output="new project")
-
-    else:
-        print("project exists")
-        return jsonify(output="project invalid")
+    
+    
+    
 
         # return jsonify({
         #     "message": "User Found"

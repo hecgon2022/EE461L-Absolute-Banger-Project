@@ -62,6 +62,10 @@ export default function Projects(user) {
   const [projectIDJoinError, setProjectIDJoinError] = useState(false)
   const [projectDescriptionError, setProjectDescriptionError] = useState(false)
 
+  const [currentProjectID, setCurrentProjectID] = useState('')
+  const [currentProjectDescription, setCurrentProjectDescription] = useState('')
+
+ 
 
   const handleSubmitCreate = (event) => {
     event.preventDefault();
@@ -82,7 +86,7 @@ export default function Projects(user) {
       const requestOptions = {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "projectID": projectIDCreate, "projectDescription": projectDescription, "user": user, "type": "create"})
+        body: JSON.stringify({ "projectID": projectIDCreate, "projectDescription": projectDescription, "user": user, "project_type": "create"})
       }
 
       fetch("/projects/", requestOptions)
@@ -91,11 +95,12 @@ export default function Projects(user) {
         )
         .then(data => {
           // console.log(data.output)
-          if (data.output === "User Found") {
+          if (data.output === "new project") {
             // Update our user status
-
-          } else {
-
+            setCurrentProjectID(projectIDCreate)
+            setCurrentProjectDescription(projectDescription)
+          } else if (data.output === "project invalid"){
+            toast("project already exists")
           }
         })
         .catch(error => {
@@ -121,7 +126,7 @@ export default function Projects(user) {
       const requestOptions = {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "projectID": projectIDJoin, "projectDescription": projectDescription, "user": user, "type": "join" })
+        body: JSON.stringify({ "projectID": projectIDJoin, "projectDescription": projectDescription, "user": user, "project_type": "join" })
       }
 
       fetch("/projects/", requestOptions)
@@ -130,11 +135,13 @@ export default function Projects(user) {
         )
         .then(data => {
           // console.log(data.output)
-          if (data.output === "User Found") {
+          if (data.output === "project exists") {
             // Update our user status
+            setCurrentProjectID(projectIDJoin)
+            setCurrentProjectDescription(projectDescription)
 
           } else {
-
+            toast("Project doesn't exist. Create it first")
           }
         })
         .catch(error => {
@@ -280,7 +287,7 @@ export default function Projects(user) {
                       endIcon={<ArrowRightRoundedIcon fontSize='large' />}
                       style={{ fontSize: 18, maxHeight: 30 }}
                     >
-                      Create
+                      Join
                     </Button>
                   </Box>
                 </form>
@@ -291,69 +298,16 @@ export default function Projects(user) {
 
 
         <Grid item xs={6} md={8}>
-          <Table>
-            <TableContainer component={Paper} className={classes.projectTable}>
-              <Table stickyHeader sx={{ maxHeight: "max-content" }} aria-label="simple table">
+          <Box>
+            <Typography>
+              Project ID: {currentProjectID}
+            </Typography>
+            <Typography>
+              Project Description: {currentProjectDescription}
+            </Typography>
 
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Project ID</TableCell>
-                    <TableCell align="right">Project Description</TableCell>
-                    <TableCell align="right">Project Funds</TableCell>
-                  </TableRow>
-                </TableHead>
 
-                <TableBody>
-                  <TableRow>
-                    <TableCell>Example Project ID</TableCell>
-                    <TableCell align="right">Example Project Description</TableCell>
-                    <TableCell align="right">Example Project Funds</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Example Project ID</TableCell>
-                    <TableCell align="right">Example Project Description</TableCell>
-                    <TableCell align="right">Example Project Funds</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Example Project ID</TableCell>
-                    <TableCell align="right">Example Project Description</TableCell>
-                    <TableCell align="right">Example Project Funds</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Example Project ID</TableCell>
-                    <TableCell align="right">Example Project Description</TableCell>
-                    <TableCell align="right">Example Project Funds</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Example Project ID</TableCell>
-                    <TableCell align="right">Example Project Description</TableCell>
-                    <TableCell align="right">Example Project Funds</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Example Project ID</TableCell>
-                    <TableCell align="right">Example Project Description</TableCell>
-                    <TableCell align="right">Example Project Funds</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Example Project ID</TableCell>
-                    <TableCell align="right">Example Project Description</TableCell>
-                    <TableCell align="right">Example Project Funds</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Example Project ID</TableCell>
-                    <TableCell align="right">Example Project Description</TableCell>
-                    <TableCell align="right">Example Project Funds</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Example Project ID</TableCell>
-                    <TableCell align="right">Example Project Description</TableCell>
-                    <TableCell align="right">Example Project Funds</TableCell>
-                  </TableRow>
-                </TableBody>
-
-              </Table>
-            </TableContainer>
-          </Table>
+          </Box>
         </Grid>
 
       </Grid>
