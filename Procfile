@@ -1,0 +1,1 @@
+web:gunicorn --chdir python app:app

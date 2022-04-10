@@ -2,12 +2,12 @@
 #front end and backend
 import time
 import json
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
 from encryption import customEncrypt
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../materialUIFrontEnd/build', static_url_path='')
 CORS(app)
 #client = pymongo.MongoClient("mongodb+srv://username:12345678910@tanyasprojects.cj00q.mongodb.net/EE461L_Project?retryWrites=true&w=majority")
 
@@ -126,6 +126,10 @@ def projects():
         # })
     return jsonify('test')
 
+@app.route('/')
+@cross_origin()
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == "__main__":
-     app.run(debug=True ,port=5000)
+     app.run(host='0.0.0.0', port=80)
