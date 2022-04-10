@@ -1,0 +1,5 @@
+{
+    "scripts": {
+        "frontend": "cd materialUIFrontEnd && npm start"
+    }
+}
