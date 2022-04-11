@@ -1,6 +1,6 @@
 {
     "scripts": {
         "frontend": "cd materialUIFrontEnd && npm start",
-        "start": "node your-script.js"
+        "start": "react-scripts start"
     }
 }
