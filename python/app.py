@@ -17,7 +17,7 @@ mongo = PyMongo(app)
 @app.route("/login/", methods=["GET","POST"], strict_slashes=False)
 @cross_origin()
 def log_in():
-
+    debug = "remove this"
     user = request.json.get("user") # get the username from the frontend
     password = request.json.get("pass") # get the password from the frontend
 
