@@ -1,5 +1,6 @@
 #simple testing to see if we can interface between
 #front end and backend
+#TO DO: mongodb communication
 import time
 import json
 from flask import Flask, request, jsonify, send_from_directory
