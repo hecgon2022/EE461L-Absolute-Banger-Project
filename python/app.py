@@ -58,7 +58,7 @@ def sign_up():
     user_doc = {
         "username" : user,
         "password" : pass_hash,
-        "projects": ["PlaceHolder"],
+        "projects": [""],
     }
 
     userFound = mongo.db.Users.find({"username": user, "password": pass_hash})
@@ -121,10 +121,40 @@ def projects():
     return jsonify('test')
 
 @app.route("/check_out/", methods=["GET","POST"], strict_slashes=False)
-@cross_origin
-def check_out(hwSetNum, amount):
-    username = request.json.get("user") 
-    projectList = mongo.db.Users.find({"username":username}, {"_id":0, "username":0, "password":0})
+@cross_origin()
+def check_out():
+    projectID = request.json.get("projectID") 
+    hwSetNum = int(request.json.get("hardwareSetNum"))
+    numUnits = int(request.json.get("numberUnits"))
+
+    projectCursor = mongo.db.Projects.find({"projectID":projectID}, {"_id":0, "projectID":0, "projectDescription":0})
+    unitList = list(projectCursor)
+    unitDict = unitList[0]
+    units_user = unitDict["units"] #this is an array cuh
+
+    
+    hwSetCursor = mongo.db.HardwareSets.find({"hardwareSetNum": hwSetNum}, {"_id":0, "availability":1})
+    hwSetList = list(hwSetCursor)
+    hwSetDict = hwSetList[0]
+    availability = hwSetDict["availability"]
+
+    if numUnits > hwSetDict["availability"]:
+        mongo.db.HardwareSets.update_one({"hardwareSetNum": hwSetNum}, {"$set": {"availability": 0}})
+        units_user[hwSetNum] += availability
+        mongo.db.Projects.update_one({"projectID": projectID}, {"$set": {"units": units_user}})
+        return jsonify({
+            "status": "successful checkout of all available items"
+        })
+    else:
+        updatedAvailability = availability - numUnits
+        mongo.db.HardwareSets.update_one({"hardwareSetNum": hwSetNum}, {"$set": {"availability": updatedAvailability}})
+        units_user[hwSetNum] += numUnits
+        mongo.db.Projects.update_one({"projectID": projectID}, {"$set": {"units": units_user}})
+        ret_message = "successful checkout of " + str(numUnits) + " units"
+        return jsonify({
+            "status": ret_message
+        })
+    return jsonify(unitDict)
 
 
 
