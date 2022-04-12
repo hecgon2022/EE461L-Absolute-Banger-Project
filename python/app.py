@@ -22,17 +22,19 @@ def log_in():
     password = request.json.get("pass") # get the password from the frontend
 
     pass_hash = customEncrypt(password, 2, 1) # encrypt the password
-    user_doc = {
-        "username" : user,
-        "password" : pass_hash
-    }
+    # user_doc = {
+    #     "username" : user,
+    #     "password" : pass_hash
+    # }
 
     #return jsonify(user_doc)
 
     # see if this is a valid username/password
-    userFound = mongo.db.Users.find(user_doc)
+    # userFound = mongo.db.Users.find(user_doc)
+    userFound = mongo.db.Users.find({"username": user, "password": pass_hash})
     results = list(userFound)
 
+    
     if len(results) == 0:
         print("user not found")
         return jsonify(output="User Not Found")
@@ -40,10 +42,6 @@ def log_in():
     else:
         print("user found!")
         return jsonify(output="User Found")
-
-        # return jsonify({
-        #     "message": "User Found"
-        # })
 
     # gotta figure out how to send data back to the frontend and then BOOOOOOOOOOM
 
@@ -61,10 +59,11 @@ def sign_up():
 
     user_doc = {
         "username" : user,
-        "password" : pass_hash
+        "password" : pass_hash,
+        "projects": ["PlaceHolder"],
     }
 
-    userFound = mongo.db.Users.find(user_doc)
+    userFound = mongo.db.Users.find({"username": user, "password": pass_hash})
     results = list(userFound)
 
 
@@ -76,11 +75,6 @@ def sign_up():
     else:
         print("user exists")
         return jsonify(output="User Not Found")
-
-        # return jsonify({
-        #     "message": "User Found"
-        # })
-    return jsonify('test')
 
 @app.route("/projects/", methods=["GET","POST"], strict_slashes=False)
 @cross_origin()
@@ -95,26 +89,34 @@ def projects():
     project_doc = {
         "projectID" : projectID,
         "projectDescription" : description,
-        #"projectFunds": funds,
-        "users": user
+        "units": [0, 0],        
     }
 
-    projectFound = mongo.db.Projects.find({"projectID":projectID})
-    results = list(projectFound)
+    projectFound = mongo.db.Projects.find({"projectID": projectID})
+    results = list(projectFound)    
 
     if project_type == "create":
         if len(results) == 0:
             mongo.db.Projects.insert_one(project_doc)
+            username = user['user']
+            user_doc = (mongo.db.Users.find_one({'username': username}))
+            projects = user_doc['projects']
+            projects.append(projectID)
+            mongo.db.Users.update_one({'username': username}, {'$set': {'projects': projects}})
             return jsonify(output="new project")
         else:
             print("project exists")
             return jsonify(output="project invalid")
+
     elif project_type == "join":
         if len(results) == 0:
-            #mongo.db.Projects.insert_one(project_doc)
             return jsonify(output="project doesn't exist")
         else:
-            #print("project exists")
+            username = user['user']
+            user_doc = (mongo.db.Users.find_one({'username': username}))
+            projects = user_doc['projects']
+            projects.append(projectID)
+            mongo.db.Users.update_one({'username': username}, {'$set': {'projects': projects}})
             return jsonify(output="project exists")
 
     
