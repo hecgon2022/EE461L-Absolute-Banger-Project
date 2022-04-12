@@ -68,11 +68,11 @@ def sign_up():
     if len(results) == 0:
         print("user doesn't exist rn")
         mongo.db.Users.insert_one(user_doc)
-        return jsonify(output="User Found")
+        return jsonify(output="User Created")
 
     else:
         print("user exists")
-        return jsonify(output="User Not Found")
+        return jsonify(output="User already created")
 
 @app.route("/projects/", methods=["GET","POST"], strict_slashes=False)
 @cross_origin()
@@ -168,6 +168,11 @@ def check_in():
     unitDict = unitList[0]
     units_user = unitDict["units"] #this is an array cuh
 
+    if numUnits < 0 or numUnits > units_user[hwSetNum]:
+        return jsonify({
+            "message": "ERROR; illegal number of units being checked in."
+        })
+
     
     hwSetCursor = mongo.db.HardwareSets.find({"hardwareSetNum": hwSetNum}, {"_id":0, "capacity":1, "availability":1})
     hwSetList = list(hwSetCursor)
@@ -175,23 +180,20 @@ def check_in():
     availability = hwSetDict["availability"]
     capacity = hwSetDict["capacity"]
 
-    if numUnits > hwSetDict["availability"]:
-        mongo.db.HardwareSets.update_one({"hardwareSetNum": hwSetNum}, {"$set": {"availability": 0}})
-        units_user[hwSetNum] += availability
-        mongo.db.Projects.update_one({"projectID": projectID}, {"$set": {"units": units_user}})
+    if (numUnits + availability) > capacity:
+        message = "ERROR; attempting to check in too many units past capacity of " + str(capacity) + " units"
         return jsonify({
-            "status": "successful checkout of all available items"
+            "message": message
         })
     else:
-        updatedAvailability = availability - numUnits
+        updatedAvailability = availability + numUnits
         mongo.db.HardwareSets.update_one({"hardwareSetNum": hwSetNum}, {"$set": {"availability": updatedAvailability}})
-        units_user[hwSetNum] += numUnits
+        units_user[hwSetNum] -= numUnits
         mongo.db.Projects.update_one({"projectID": projectID}, {"$set": {"units": units_user}})
-        ret_message = "successful checkout of " + str(numUnits) + " units"
+        ret_message = "successful checkin of " + str(numUnits) + " units to hwSet " + str(hwSetNum)
         return jsonify({
             "status": ret_message
         })
-    return jsonify(unitDict)
 
 
 
