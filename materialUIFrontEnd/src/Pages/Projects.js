@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { TextField, Button, InputAdornment, Typography, makeStyles, Box, Container, Card, CardContent, Grid, Paper } from "@material-ui/core";
-import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
+import {
+  TextField, Button, InputAdornment, Typography, makeStyles, Box, Container, Card, CardContent, Grid, FormControl, InputLabel,
+  Select, MenuItem
+} from "@material-ui/core";
 import CardHeader from "@material-ui/core/CardHeader";
 import AccountBoxRoundedIcon from '@material-ui/icons/AccountBoxRounded';
 import { VpnKeyRounded } from '@material-ui/icons';
@@ -11,19 +13,19 @@ import ArrowRightRoundedIcon from '@material-ui/icons/ArrowRightRounded';
 
 const useStyles = makeStyles({
 
-  userField: {
+  idField: {
     marginBottom: 10,
     marginTop: 20,
     display: 'block',
   },
 
-  userJoinField: {
+  idJoinField: {
     marginBottom: 30,
     marginTop: 20,
     display: 'block',
   },
 
-  passwordField: {
+  descField: {
     marginBottom: 30,
     display: 'block',
   },
@@ -55,17 +57,31 @@ const useStyles = makeStyles({
 export default function Projects(user) {
 
   const classes = useStyles()
+
+  // Create Project States
   const [projectIDCreate, setProjectIDCreate] = useState('')
-  const [projectIDJoin, setProjectIDJoin] = useState('')
-  const [projectDescription, setProjectDescription] = useState('')
   const [projectIDCreateError, setProjectIDCreateError] = useState(false)
-  const [projectIDJoinError, setProjectIDJoinError] = useState(false)
+  const [projectDescription, setProjectDescription] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState(false)
 
+  // Join Project States
+  const [projectIDJoin, setProjectIDJoin] = useState('')
+  const [projectIDJoinError, setProjectIDJoinError] = useState(false)
+
+  // Display Current Project States
   const [currentProjectID, setCurrentProjectID] = useState('')
   const [currentProjectDescription, setCurrentProjectDescription] = useState('')
 
- 
+  // Check in / Check out States
+  const [checkInOut, setCheckInOut] = useState("")
+  const [hwset, setHwset] = useState("")
+  const [qty, setQty] = useState("")
+  const [checkInOutError, setCheckInOutError] = useState(false)
+  const [hwsetError, setHwsetError] = useState(false)
+  const [qtyError, setQtyError] = useState(false)
+
+
+  //-------------------------------------------------------------------------------------------------------------------------------------------------  
 
   const handleSubmitCreate = (event) => {
     event.preventDefault();
@@ -86,7 +102,7 @@ export default function Projects(user) {
       const requestOptions = {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "projectID": projectIDCreate, "projectDescription": projectDescription, "user": user, "project_type": "create"})
+        body: JSON.stringify({ "projectID": projectIDCreate, "projectDescription": projectDescription, "user": user, "project_type": "create" })
       }
 
       fetch("/projects/", requestOptions)
@@ -99,7 +115,7 @@ export default function Projects(user) {
             // Update our user status
             setCurrentProjectID(projectIDCreate)
             setCurrentProjectDescription(projectDescription)
-          } else if (data.output === "project invalid"){
+          } else if (data.output === "project invalid") {
             toast("project already exists")
           }
         })
@@ -157,6 +173,78 @@ export default function Projects(user) {
     }
   }
 
+  const handleSubmitCheckInOut = (event) => {
+    event.preventDefault();
+
+    setCheckInOutError(false)
+    setHwsetError(false)
+    setQtyError(false)
+
+    if (currentProjectID === '') {
+      toast("Please specify project!")
+      return
+    }
+
+    if (checkInOut === '') {
+      setCheckInOutError(true)
+    }
+
+    if (hwset === '') {
+      setHwsetError(true)
+    }
+
+    if (qty === '') {
+      setQtyError(true)
+    }
+
+    if (checkInOut && hwset && qty) {
+
+      const requestOptions = {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ "projectID": currentProjectID, "checkInOut": checkInOut, "hwset": hwset, "qty": qty })
+      }
+
+      fetch("/check-in-out/", requestOptions)
+        .then(response =>
+          response.json()
+        )
+        .then(data => {
+
+          // Error processing check in
+          if (data.output === "Check In Error") {
+            toast("Error processing Check In")
+          }
+
+          // Error processing check out
+          else if (data.output === "Check Out Error") {
+            toast("Error processing Check Out")
+          }
+
+          // No errors
+          else {
+            toast("Great Success")
+          }
+
+        })
+        .catch(error => {
+          console.log(error)
+        })
+
+      //we have to then return the profile depending on the log in information here.
+      //this is the end of the if statement
+    } else {
+      toast("You must be logged in to join.")
+    }
+
+
+
+  }
+
+
+
+  //---------------------------------------------------------------------------------------------------------------------------------------------------
+
   return (
 
     <Container>
@@ -181,7 +269,7 @@ export default function Projects(user) {
                 <form noValidate autoComplete='off' onSubmit={handleSubmitCreate}>
                   <Box id="projectID-input">
                     <TextField
-                      className={classes.userField}
+                      className={classes.idField}
                       label="Project ID"
                       color="secondary"
                       onChange={
@@ -208,7 +296,7 @@ export default function Projects(user) {
 
                   <Box id="projectDesc-input">
                     <TextField
-                      className={classes.passwordField}
+                      className={classes.descField}
                       label="Project Description"
                       color="secondary"
                       onChange={
@@ -251,13 +339,13 @@ export default function Projects(user) {
                 <Typography
                   variant='h4'
                   classname={classes.titles}>
-                  Join a Project
+                  Join/Access a Project
                 </Typography>
 
                 <form noValidate autoComplete='off' onSubmit={handleSubmitJoin}>
                   <Box id="projectID-input">
                     <TextField
-                      className={classes.userJoinField}
+                      className={classes.idJoinField}
                       label="Project ID"
                       color="secondary"
                       onChange={
@@ -310,6 +398,86 @@ export default function Projects(user) {
               Project Description: {currentProjectDescription}
             </Typography>
 
+            <form noValidate autoComplete='off' onSubmit={handleSubmitCheckInOut}>
+
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="Check-In/Out-DropDown">Check In/Out</InputLabel>
+                  <Select
+                    labelId="Check-In/Out"
+                    id="Check-In/Out"
+                    value={checkInOut}
+                    label="Select Action"
+                    onChange={
+                      (e) => setCheckInOut(e.target.value)
+                    }
+                    error={checkInOutError}
+                  >
+                    <MenuItem value={"In"}>Check-In</MenuItem>
+                    <MenuItem value={"Out"}>Check-Out</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="hwset">HWSet</InputLabel>
+                  <Select
+                    labelId="hwsetLabel"
+                    id="hwsetID"
+                    value={hwset}
+                    label="Select Action"
+                    onChange={
+                      (e) => setHwset(e.target.value)
+                    }
+                    error={hwsetError}
+                  >
+                    <MenuItem value={1}>HWSet-1</MenuItem>
+                    <MenuItem value={2}>HWSet-2</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+
+              <Box id="projectID-input">
+                <TextField
+                  className={classes.qtyField}
+                  label="Qty"
+                  color="secondary"
+                  onChange={
+                    (e) => setQty(e.target.value)
+                  }
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccountBoxRoundedIcon />
+                      </InputAdornment>
+                    ),
+                    style: {
+                      fontSize: 24,
+                    },
+                  }}
+                  InputLabelProps={{
+                    style: { fontSize: 22 }
+                  }}
+                  required
+                  fullWidth
+                  error={qtyError}
+                />
+              </Box>
+
+              <Box id="login-button/projects">
+                <Button
+                  id="Check in/out"
+                  className={classes.button}
+                  variant="contained"
+                  type="submit"
+                  endIcon={<ArrowRightRoundedIcon fontSize='large' />}
+                  style={{ fontSize: 18, maxHeight: 30 }}
+                >
+                  Submit
+                </Button>
+              </Box>
+            </form>
 
           </Box>
         </Grid>

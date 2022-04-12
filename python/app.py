@@ -27,7 +27,6 @@ def log_in():
         "password" : pass_hash
     }
 
-    #return jsonify(user_doc)
 
     # see if this is a valid username/password
     userFound = mongo.db.Users.find(user_doc)
@@ -41,11 +40,6 @@ def log_in():
         print("user found!")
         return jsonify(output="User Found")
 
-        # return jsonify({
-        #     "message": "User Found"
-        # })
-
-    # gotta figure out how to send data back to the frontend and then BOOOOOOOOOOM
 
 
 # this is for the signup route, we will do this stuff later
@@ -117,13 +111,7 @@ def projects():
             #print("project exists")
             return jsonify(output="project exists")
 
-    
-    
-    
-
-        # return jsonify({
-        #     "message": "User Found"
-        # })
+            
     return jsonify('test')
 
 
