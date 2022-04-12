@@ -120,6 +120,14 @@ def projects():
             
     return jsonify('test')
 
+@app.route("/check_out/", methods=["GET","POST"], strict_slashes=False)
+@cross_origin
+def check_out(hwSetNum, amount):
+    username = request.json.get("user") 
+    projectList = mongo.db.Users.find({"username":username}, {"_id":0, "username":0, "password":0})
+
+
+
 
 if __name__ == "__main__":
      app.run(debug=True ,port=5000)
