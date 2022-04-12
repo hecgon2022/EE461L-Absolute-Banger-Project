@@ -52,7 +52,27 @@ const useStyles = makeStyles({
     display: "block",
   },
 
+  projectID: {
+    marginLeft: 20,
+    marginTop: 70,
+  },
+
+  projectDesc: {
+    marginLeft: 20,
+    marginTop: 10,
+    marginBottom: 220,
+  },
+
+  checkInOutInputs: {
+    marginLeft: 100,
+    marginBottom: 20,
+  },
+
 })
+
+const cardStyle = {
+    height: "40.18vw"
+};
 
 export default function Projects(user) {
 
@@ -236,10 +256,9 @@ export default function Projects(user) {
     } else {
       toast("You must be logged in to join.")
     }
-
-
-
   }
+
+
 
 
 
@@ -390,82 +409,74 @@ export default function Projects(user) {
 
 
         <Grid item xs={6} md={8}>
-          <Box>
-            <Typography>
+          <Card elevation={2} style={cardStyle}>
+            <Typography variant='h4' className={classes.projectID}>
               Project ID: {currentProjectID}
             </Typography>
-            <Typography>
-              Project Description: {currentProjectDescription}
+            <Typography variant='h5' className={classes.projectDesc}>
+              Description: {currentProjectDescription}
             </Typography>
 
             <form noValidate autoComplete='off' onSubmit={handleSubmitCheckInOut}>
 
-              <Box sx={{ minWidth: 120 }}>
-                <FormControl fullWidth>
-                  <InputLabel id="Check-In/Out-DropDown">Check In/Out</InputLabel>
-                  <Select
-                    labelId="Check-In/Out"
-                    id="Check-In/Out"
-                    value={checkInOut}
-                    label="Select Action"
+              <Grid container className={classes.checkInOutInputs}>
+                <Box px={3}>
+                  <FormControl style={{minWidth: 150}} variant="outlined">
+                    <InputLabel id="Check-In/Out-DropDown">Check In/Out</InputLabel>
+                    <Select
+                      labelId="Check-In/Out"
+                      id="Check-In/Out"
+                      value={checkInOut}
+                      label="Select Action"
+                      onChange={
+                        (e) => setCheckInOut(e.target.value)
+                      }
+                      error={checkInOutError}
+                    >
+                      <MenuItem value={"In"}>Check-In</MenuItem>
+                      <MenuItem value={"Out"}>Check-Out</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+
+                <Box px={3}>
+                  <FormControl style={{minWidth: 150}} variant="outlined">
+                    <InputLabel id="hwset">HWSet</InputLabel>
+                    <Select
+                      labelId="hwsetLabel"
+                      id="hwsetID"
+                      value={hwset}
+                      label="Select Action"
+                      onChange={
+                        (e) => setHwset(e.target.value)
+                      }
+                      error={hwsetError}
+                    >
+                      <MenuItem value={1}>HWSet-1</MenuItem>
+                      <MenuItem value={2}>HWSet-2</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+
+                <Box id="projectID-input" px={3}>
+                  <TextField
+                    className={classes.qtyField}
+                    label="Qty"
+                    color="secondary"
+                    variant="outlined"
                     onChange={
-                      (e) => setCheckInOut(e.target.value)
+                      (e) => setQty(e.target.value)
                     }
-                    error={checkInOutError}
-                  >
-                    <MenuItem value={"In"}>Check-In</MenuItem>
-                    <MenuItem value={"Out"}>Check-Out</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
+                    InputLabelProps={{
+                      style: { fontSize: 22 }
+                    }}
+                    style = {{width: 150}}
+                    error={qtyError}
+                  />
+                </Box>
+              </Grid>
 
-              <Box sx={{ minWidth: 120 }}>
-                <FormControl fullWidth>
-                  <InputLabel id="hwset">HWSet</InputLabel>
-                  <Select
-                    labelId="hwsetLabel"
-                    id="hwsetID"
-                    value={hwset}
-                    label="Select Action"
-                    onChange={
-                      (e) => setHwset(e.target.value)
-                    }
-                    error={hwsetError}
-                  >
-                    <MenuItem value={1}>HWSet-1</MenuItem>
-                    <MenuItem value={2}>HWSet-2</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-
-              <Box id="projectID-input">
-                <TextField
-                  className={classes.qtyField}
-                  label="Qty"
-                  color="secondary"
-                  onChange={
-                    (e) => setQty(e.target.value)
-                  }
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AccountBoxRoundedIcon />
-                      </InputAdornment>
-                    ),
-                    style: {
-                      fontSize: 24,
-                    },
-                  }}
-                  InputLabelProps={{
-                    style: { fontSize: 22 }
-                  }}
-                  required
-                  fullWidth
-                  error={qtyError}
-                />
-              </Box>
-
-              <Box id="login-button/projects">
+              <Box id="login-button/projects" px={10}>
                 <Button
                   id="Check in/out"
                   className={classes.button}
@@ -479,7 +490,7 @@ export default function Projects(user) {
               </Box>
             </form>
 
-          </Box>
+          </Card>
         </Grid>
 
       </Grid>
