@@ -60,13 +60,24 @@ const useStyles = makeStyles({
   projectDesc: {
     marginLeft: 20,
     marginTop: 10,
-    marginBottom: 220,
+    // marginBottom: 220,
   },
 
   checkInOutInputs: {
     marginLeft: 100,
     marginBottom: 20,
   },
+
+  hwset1: {
+    marginLeft: 20,
+    marginTop: 10,
+  },
+
+  hwset2: {
+    marginLeft: 20,
+    marginTop: 10,
+    marginBottom: 150
+  }
 
 })
 
@@ -99,6 +110,10 @@ export default function Projects(user) {
   const [checkInOutError, setCheckInOutError] = useState(false)
   const [hwsetError, setHwsetError] = useState(false)
   const [qtyError, setQtyError] = useState(false)
+
+  // HardWare Set States
+  const[hwset1, setHwSet1] = useState("")
+  const[hwset2, setHwSet2] = useState("")
 
 
   //-------------------------------------------------------------------------------------------------------------------------------------------------  
@@ -172,15 +187,13 @@ export default function Projects(user) {
           response.json()
         )
         .then(data => {
-          // console.log(data.output)
-          if (data.output === "project exists") {
-            // Update our user status
-            setCurrentProjectID(projectIDJoin)
-            setCurrentProjectDescription(projectDescription)
+          
+          console.log(data.output["projectDescription"])
 
-          } else {
-            toast("Project doesn't exist. Create it first")
-          }
+          setCurrentProjectID(data.output["projectID"]) 
+          setCurrentProjectDescription(data.output["projectDescription"])
+          setHwSet1(data.output["hwset1"])
+          setHwSet2(data.output["hwset2"])
         })
         .catch(error => {
           console.log(error)
@@ -244,6 +257,8 @@ export default function Projects(user) {
           // No errors
           else {
             toast("Great Success")
+            setHwSet1(data.output["hwset1"])
+            setHwSet2(data.output["hwset2"])
           }
 
         })
@@ -416,6 +431,13 @@ export default function Projects(user) {
             <Typography variant='h5' className={classes.projectDesc}>
               Description: {currentProjectDescription}
             </Typography>
+            <Typography variant='h5' className={classes.hwset1}>
+              Units Checked Out From HWSET1: {hwset1}
+            </Typography>
+            <Typography variant='h5' className={classes.hwset2}>
+              Units Checked Out From HWSET2: {hwset2}
+            </Typography>
+
 
             <form noValidate autoComplete='off' onSubmit={handleSubmitCheckInOut}>
 

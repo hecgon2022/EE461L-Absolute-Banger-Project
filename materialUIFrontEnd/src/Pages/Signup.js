@@ -86,7 +86,7 @@ export default function Signup({ setGlobalUser, setLoginStatus }) {
                 )
                 .then(data => {
                     // console.log(data.output)
-                    if (data.output === "User Found") {
+                    if (data.output === "User Created") {
                         // Update our user status
                         setGlobalUser(username)
                         setLoginStatus("Log Out")

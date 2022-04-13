@@ -1,5 +1,6 @@
 #simple testing to see if we can interface between
 #front end and backend
+from re import I
 import time
 import json
 from flask import Flask, request, jsonify
@@ -33,7 +34,7 @@ def log_in():
     userFound = mongo.db.Users.find({"username": user, "password": pass_hash})
     results = list(userFound)
 
-    
+    # when the length is zero, this means that nothing was foumd
     if len(results) == 0:
         print("user not found")
         return jsonify(output="User Not Found")
@@ -63,8 +64,6 @@ def sign_up():
 
     userFound = mongo.db.Users.find({"username": user, "password": pass_hash})
     results = list(userFound)
-
-
 
     if len(results) == 0:
         print("user doesn't exist rn")
@@ -115,17 +114,41 @@ def projects():
             username = user['user']
             user_doc = (mongo.db.Users.find_one({'username': username}))
             projects = user_doc['projects']
+
+            # gotta add in a check for to make sure that we dont add in same project name to list
+            # we can honestly do this tmrw
+
             projects.append(projectID)
             mongo.db.Users.update_one({'username': username}, {'$set': {'projects': projects}})
 
+            #########################################
+            # TESTING
+            ################################################
+
             # we should return the project id and the project description
-            projectCursor = mongo.db.Projects.find({"projectID": projectID, {"_id":0, "units":0, "projectID":1, "projectDescription":1}}
+            projectCursor = mongo.db.Projects.find({"projectID": projectID}, {"_id":0, "projectID":1, "projectDescription":1, "units":1})
             projectList = list(projectCursor) 
+
+            print(projectList)
+
             projectDict = projectList[0]
-            description = projectDict["projectDescription"]
             ID = projectDict["projectID"]
+            description = projectDict["projectDescription"]
+            units = projectDict["units"]
             
-            return jsonify(output="project exists")
+            print(ID)
+            print(description)
+            print(units)
+
+            # create a dictionary for these two values to pass back to frontend
+            projectInfo = {
+                "projectID": ID,
+                "projectDescription": description,
+                "hwset1": units[0],
+                "hwset2": units[1]
+            }
+            
+            return jsonify(output=projectInfo)
 
             
     return jsonify('test')
@@ -153,6 +176,7 @@ def check_in_out():
         print(projectID)
         print(hwSetNum)
         print(numUnits)
+
 
         projectCursor = mongo.db.Projects.find({"projectID":projectID}, {"_id":0, "projectID":0, "projectDescription":0})
         unitList = list(projectCursor)
@@ -185,6 +209,8 @@ def check_in_out():
             return jsonify({
                 "message": message
             })
+
+        # this is for a successful check in 
         else:
             updatedAvailability = availability + numUnits
             print('updated availability ', str(updatedAvailability))
@@ -192,11 +218,25 @@ def check_in_out():
             mongo.db.HardwareSets.update_one({"hardwareSetNum": temp}, {"$set": {"availability": updatedAvailability}})
             units_user[temp] -= numUnits
             mongo.db.Projects.update_one({"projectID": projectID}, {"$set": {"units": units_user}})
-            ret_message = "successful checkin of " + str(numUnits) + " units to hwSet " + str(temp)
 
-        
+            # TESTING, want to return the updated hardware sets to the screen
+            projectCursor = mongo.db.Projects.find({"projectID": projectID}, {"_id":0, "projectID":1, "projectDescription":1, "units":1})
+            projectList = list(projectCursor) 
+
+            print(projectList)
+            projectDict = projectList[0]
+            units = projectDict["units"]
+
+            hwSets = {
+                "hwset1": units[0],
+                "hwset2": units[1]
+            }
+
+
+            # ret_message = "successful checkin of " + str(numUnits) + " units to hwSet " + str(temp)
+
             return jsonify({
-                "status": ret_message
+                "output": hwSets
             })
 
 
@@ -222,27 +262,77 @@ def check_in_out():
         hwSetDict = hwSetList[0]
         availability = hwSetDict["availability"]
 
+        # still need to include something for check out errors
+        
+        # all of these statements below correspond to successfule check out messages
+
         if numUnits > hwSetDict["availability"]:
             mongo.db.HardwareSets.update_one({"hardwareSetNum": temp}, {"$set": {"availability": 0}})
             units_user[temp] += availability
             mongo.db.Projects.update_one({"projectID": projectID}, {"$set": {"units": units_user}})
+
+            # TESTING, want to return the updated hardware sets to the screen
+            projectCursor = mongo.db.Projects.find({"projectID": projectID}, {"_id":0, "projectID":1, "projectDescription":1, "units":1})
+            projectList = list(projectCursor) 
+
+            print(projectList)
+            projectDict = projectList[0]
+            units = projectDict["units"]
+
+            hwSets = {
+                "hwset1": units[0],
+                "hwset2": units[1]
+            }
+
             return jsonify({
-                "status": "successful checkout of all available items"
+                "output": hwSets
             })
+
+
         else:
             updatedAvailability = availability - numUnits
             mongo.db.HardwareSets.update_one({"hardwareSetNum": temp}, {"$set": {"availability": updatedAvailability}})
             units_user[temp] += numUnits
             mongo.db.Projects.update_one({"projectID": projectID}, {"$set": {"units": units_user}})
-            ret_message = "successful checkout of " + str(numUnits) + " units"
+
+            # TESTING, want to return the updated hardware sets to the screen
+            projectCursor = mongo.db.Projects.find({"projectID": projectID}, {"_id":0, "projectID":1, "projectDescription":1, "units":1})
+            projectList = list(projectCursor) 
+
+            print(projectList)
+            projectDict = projectList[0]
+            units = projectDict["units"]
+
+            hwSets = {
+                "hwset1": units[0],
+                "hwset2": units[1]
+            }
+
+            # ret_message = "successful checkout of " + str(numUnits) + " units"
             return jsonify({
-                "status": ret_message
+                "output": hwSets
             })
-        return jsonify(unitDict)
 
 
 if __name__ == "__main__":
      app.run(debug=True ,port=5000)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
