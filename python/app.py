@@ -106,6 +106,7 @@ def projects():
             print("project exists")
             return jsonify(output="project invalid")
 
+    # this is for the join command of the website
     elif project_type == "join":
         if len(results) == 0:
             return jsonify(output="project doesn't exist")
@@ -115,46 +116,15 @@ def projects():
             projects = user_doc['projects']
             projects.append(projectID)
             mongo.db.Users.update_one({'username': username}, {'$set': {'projects': projects}})
+
+            # we should return the project id and the project description
+            
+
             return jsonify(output="project exists")
 
             
     return jsonify('test')
 
-@app.route("/check_out/", methods=["GET","POST"], strict_slashes=False)
-@cross_origin()
-def check_out():
-    projectID = request.json.get("projectID") 
-    hwSetNum = int(request.json.get("hwset"))
-    numUnits = int(request.json.get("qty"))
-
-    projectCursor = mongo.db.Projects.find({"projectID":projectID}, {"_id":0, "projectID":0, "projectDescription":0})
-    unitList = list(projectCursor)
-    unitDict = unitList[0]
-    units_user = unitDict["units"] #this is an array cuh
-
-    
-    hwSetCursor = mongo.db.HardwareSets.find({"hardwareSetNum": hwSetNum}, {"_id":0, "availability":1})
-    hwSetList = list(hwSetCursor)
-    hwSetDict = hwSetList[0]
-    availability = hwSetDict["availability"]
-
-    if numUnits > hwSetDict["availability"]:
-        mongo.db.HardwareSets.update_one({"hardwareSetNum": hwSetNum}, {"$set": {"availability": 0}})
-        units_user[hwSetNum] += availability
-        mongo.db.Projects.update_one({"projectID": projectID}, {"$set": {"units": units_user}})
-        return jsonify({
-            "status": "successful checkout of all available items"
-        })
-    else:
-        updatedAvailability = availability - numUnits
-        mongo.db.HardwareSets.update_one({"hardwareSetNum": hwSetNum}, {"$set": {"availability": updatedAvailability}})
-        units_user[hwSetNum] += numUnits
-        mongo.db.Projects.update_one({"projectID": projectID}, {"$set": {"units": units_user}})
-        ret_message = "successful checkout of " + str(numUnits) + " units"
-        return jsonify({
-            "status": ret_message
-        })
-    return jsonify(unitDict)
 
 ###################################################################################
 ###################################################################################
@@ -268,3 +238,43 @@ def check_in_out():
 
 if __name__ == "__main__":
      app.run(debug=True ,port=5000)
+
+
+
+
+
+# @app.route("/check_out/", methods=["GET","POST"], strict_slashes=False)
+# @cross_origin()
+# def check_out():
+#     projectID = request.json.get("projectID") 
+#     hwSetNum = int(request.json.get("hwset"))
+#     numUnits = int(request.json.get("qty"))
+
+#     projectCursor = mongo.db.Projects.find({"projectID":projectID}, {"_id":0, "projectID":0, "projectDescription":0})
+#     unitList = list(projectCursor)
+#     unitDict = unitList[0]
+#     units_user = unitDict["units"] #this is an array cuh
+
+    
+#     hwSetCursor = mongo.db.HardwareSets.find({"hardwareSetNum": hwSetNum}, {"_id":0, "availability":1})
+#     hwSetList = list(hwSetCursor)
+#     hwSetDict = hwSetList[0]
+#     availability = hwSetDict["availability"]
+
+#     if numUnits > hwSetDict["availability"]:
+#         mongo.db.HardwareSets.update_one({"hardwareSetNum": hwSetNum}, {"$set": {"availability": 0}})
+#         units_user[hwSetNum] += availability
+#         mongo.db.Projects.update_one({"projectID": projectID}, {"$set": {"units": units_user}})
+#         return jsonify({
+#             "status": "successful checkout of all available items"
+#         })
+#     else:
+#         updatedAvailability = availability - numUnits
+#         mongo.db.HardwareSets.update_one({"hardwareSetNum": hwSetNum}, {"$set": {"availability": updatedAvailability}})
+#         units_user[hwSetNum] += numUnits
+#         mongo.db.Projects.update_one({"projectID": projectID}, {"$set": {"units": units_user}})
+#         ret_message = "successful checkout of " + str(numUnits) + " units"
+#         return jsonify({
+#             "status": ret_message
+#         })
+#     return jsonify(unitDict)
