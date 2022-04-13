@@ -247,7 +247,7 @@ export default function Projects(user) {
         .then(data => {
 
           // Error processing check in
-          if (data.output === "Check In Error") {
+          if (data.output === "ERROR; illegal number of units being checked in.") {
             toast("Error processing Check In")
           }
 

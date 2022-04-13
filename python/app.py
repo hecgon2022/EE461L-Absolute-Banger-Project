@@ -59,7 +59,7 @@ def sign_up():
     user_doc = {
         "username" : user,
         "password" : pass_hash,
-        "projects": [""],
+        "projects": [],
     }
 
     userFound = mongo.db.Users.find({"username": user, "password": pass_hash})
@@ -117,9 +117,17 @@ def projects():
 
             # gotta add in a check for to make sure that we dont add in same project name to list
             # we can honestly do this tmrw
+            print(projects)
 
-            projects.append(projectID)
-            mongo.db.Users.update_one({'username': username}, {'$set': {'projects': projects}})
+            flag = 0 # if flag gets set to 1, then we just don't include this in the projects list
+
+            for items in projects:
+                if projectID == items:
+                    flag = 1
+
+            if flag == 0:
+                projects.append(projectID)
+                mongo.db.Users.update_one({'username': username}, {'$set': {'projects': projects}})
 
             #########################################
             # TESTING
@@ -191,7 +199,7 @@ def check_in_out():
 
         if numUnits < 0 or numUnits > units_user[temp]:
             return jsonify({
-                "message": "ERROR; illegal number of units being checked in."
+                "output": "ERROR; illegal number of units being checked in."
             })
 
         
@@ -207,7 +215,7 @@ def check_in_out():
         if (numUnits + availability) > capacity:
             message = "ERROR; attempting to check in too many units past capacity of " + str(capacity) + " units"
             return jsonify({
-                "message": message
+                "output": message
             })
 
         # this is for a successful check in 
@@ -263,6 +271,7 @@ def check_in_out():
         availability = hwSetDict["availability"]
 
         # still need to include something for check out errors
+        # like if we to check out stuff when there is no availability
         
         # all of these statements below correspond to successfule check out messages
 
