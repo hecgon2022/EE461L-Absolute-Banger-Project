@@ -150,6 +150,8 @@ export default function Projects(user) {
             // Update our user status
             setCurrentProjectID(projectIDCreate)
             setCurrentProjectDescription(projectDescription)
+            setHwSet1(0)
+            setHwSet2(0)
           } else if (data.output === "project invalid") {
             toast("project already exists")
           }
