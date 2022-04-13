@@ -65,6 +65,7 @@ def sign_up():
     results = list(userFound)
 
 
+
     if len(results) == 0:
         print("user doesn't exist rn")
         mongo.db.Users.insert_one(user_doc)
@@ -118,8 +119,12 @@ def projects():
             mongo.db.Users.update_one({'username': username}, {'$set': {'projects': projects}})
 
             # we should return the project id and the project description
+            projectCursor = mongo.db.Projects.find({"projectID": projectID, {"_id":0, "units":0, "projectID":1, "projectDescription":1}}
+            projectList = list(projectCursor) 
+            projectDict = projectList[0]
+            description = projectDict["projectDescription"]
+            ID = projectDict["projectID"]
             
-
             return jsonify(output="project exists")
 
             
