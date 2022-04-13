@@ -170,28 +170,40 @@ def check_in_out():
     print(checkinout)
 
     # this is for the check in
-    if checkinout == "In":
+    if str(checkinout) == "In":
         projectID = request.json.get("projectID") 
         hwSetNum = int(request.json.get("hwset"))
         numUnits = int(request.json.get("qty"))
 
+        print(projectID)
+        print(hwSetNum)
+        print(numUnits)
 
         projectCursor = mongo.db.Projects.find({"projectID":projectID}, {"_id":0, "projectID":0, "projectDescription":0})
         unitList = list(projectCursor)
         unitDict = unitList[0]
         units_user = unitDict["units"] #this is an array cuh lets goooooo 
 
-        if numUnits < 0 or numUnits > units_user[hwSetNum]:
+        print(unitList)
+        print(unitDict)
+        print(units_user) # this gets the units checked out for each hw set
+
+        temp = hwSetNum - 1 # this is to make the hw set to 0 and 1
+
+        if numUnits < 0 or numUnits > units_user[temp]:
             return jsonify({
                 "message": "ERROR; illegal number of units being checked in."
             })
 
         
-        hwSetCursor = mongo.db.HardwareSets.find({"hardwareSetNum": hwSetNum}, {"_id":0, "capacity":1, "availability":1})
+        hwSetCursor = mongo.db.HardwareSets.find({"hardwareSetNum": temp}, {"_id":0, "capacity":1, "availability":1})
         hwSetList = list(hwSetCursor)
         hwSetDict = hwSetList[0]
         availability = hwSetDict["availability"]
         capacity = hwSetDict["capacity"]
+
+        print("availability", availability)
+        print("capacity", capacity)
 
         if (numUnits + availability) > capacity:
             message = "ERROR; attempting to check in too many units past capacity of " + str(capacity) + " units"
@@ -202,16 +214,21 @@ def check_in_out():
             updatedAvailability = availability + numUnits
             print('updated availability ', str(updatedAvailability))
 
-            mongo.db.HardwareSets.update_one({"hardwareSetNum": hwSetNum}, {"$set": {"availability": updatedAvailability}})
-            units_user[hwSetNum] -= numUnits
+            mongo.db.HardwareSets.update_one({"hardwareSetNum": temp}, {"$set": {"availability": updatedAvailability}})
+            units_user[temp] -= numUnits
             mongo.db.Projects.update_one({"projectID": projectID}, {"$set": {"units": units_user}})
-            ret_message = "successful checkin of " + str(numUnits) + " units to hwSet " + str(hwSetNum)
+            ret_message = "successful checkin of " + str(numUnits) + " units to hwSet " + str(temp)
 
         
             return jsonify({
                 "status": ret_message
             })
 
+
+
+    #######################################################################
+    #######################################################################
+    #######################################################################
     # this is for check out
     elif checkinout == "Out":
         projectID = request.json.get("projectID") 
@@ -223,23 +240,24 @@ def check_in_out():
         unitDict = unitList[0]
         units_user = unitDict["units"] #this is an array cuh
 
+        temp = hwSetNum - 1
         
-        hwSetCursor = mongo.db.HardwareSets.find({"hardwareSetNum": hwSetNum}, {"_id":0, "availability":1})
+        hwSetCursor = mongo.db.HardwareSets.find({"hardwareSetNum": temp}, {"_id":0, "availability":1})
         hwSetList = list(hwSetCursor)
         hwSetDict = hwSetList[0]
         availability = hwSetDict["availability"]
 
         if numUnits > hwSetDict["availability"]:
-            mongo.db.HardwareSets.update_one({"hardwareSetNum": hwSetNum}, {"$set": {"availability": 0}})
-            units_user[hwSetNum] += availability
+            mongo.db.HardwareSets.update_one({"hardwareSetNum": temp}, {"$set": {"availability": 0}})
+            units_user[temp] += availability
             mongo.db.Projects.update_one({"projectID": projectID}, {"$set": {"units": units_user}})
             return jsonify({
                 "status": "successful checkout of all available items"
             })
         else:
             updatedAvailability = availability - numUnits
-            mongo.db.HardwareSets.update_one({"hardwareSetNum": hwSetNum}, {"$set": {"availability": updatedAvailability}})
-            units_user[hwSetNum] += numUnits
+            mongo.db.HardwareSets.update_one({"hardwareSetNum": temp}, {"$set": {"availability": updatedAvailability}})
+            units_user[temp] += numUnits
             mongo.db.Projects.update_one({"projectID": projectID}, {"$set": {"units": units_user}})
             ret_message = "successful checkout of " + str(numUnits) + " units"
             return jsonify({
