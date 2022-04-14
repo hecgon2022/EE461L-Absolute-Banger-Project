@@ -4,12 +4,12 @@ from re import I
 import time
 import json
 from flask import Flask, request, jsonify
-from flask_cors import CORS, cross_origin
+#from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
 from encryption import customEncrypt
 
 app = Flask(__name__)
-CORS(app)
+#CORS(app)
 #client = pymongo.MongoClient("mongodb+srv://username:12345678910@tanyasprojects.cj00q.mongodb.net/EE461L_Project?retryWrites=true&w=majority")
 
 app.config["MONGO_URI"] = "mongodb+srv://username:12345678910@tanyasprojects.cj00q.mongodb.net/EE461L_Project?retryWrites=true&w=majority"
