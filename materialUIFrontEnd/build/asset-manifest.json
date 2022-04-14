@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.22262cd7.css",
+    "main.js": "/static/js/main.5c47c780.js",
+    "static/media/mit-logo.png": "/static/media/mit-logo.b1ce4e63a29209b7223f.png",
+    "static/media/washington-logo.png": "/static/media/washington-logo.6930319e4db64e2e3fba.png",
+    "static/media/cag-logo.jpg": "/static/media/cag-logo.9ab59a04dae3a5839a44.jpg",
+    "static/media/pz-logo.png": "/static/media/pz-logo.ff9b3351a8eb7331cf1a.png",
+    "index.html": "/index.html",
+    "main.22262cd7.css.map": "/static/css/main.22262cd7.css.map",
+    "main.5c47c780.js.map": "/static/js/main.5c47c780.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.22262cd7.css",
+    "static/js/main.5c47c780.js"
+  ]
+}
