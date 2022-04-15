@@ -6,7 +6,7 @@ import json
 from flask import Flask, request, jsonify
 #from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
-from encryption import customEncrypt
+from python.encryption import customEncrypt
 
 app = Flask(__name__)
 #CORS(app)
