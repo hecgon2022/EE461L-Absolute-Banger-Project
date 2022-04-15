@@ -5,12 +5,13 @@ from re import I
 import time
 import json
 from flask import Flask, request, jsonify
-#from flask_cors import CORS, cross_origin
+from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
 from python.encryption import customEncrypt
 
-app = Flask(__name__, static_folder="./materialUIFrontEnd/build")
-#CORS(app)
+app = Flask(__name__, static_folder="./materialUIFrontEnd/build", static_url_path="/")
+#app = Flask(__name__)
+CORS(app)
 #client = pymongo.MongoClient("mongodb+srv://username:12345678910@tanyasprojects.cj00q.mongodb.net/EE461L_Project?retryWrites=true&w=majority")
 
 app.config["MONGO_URI"] = "mongodb+srv://username:12345678910@tanyasprojects.cj00q.mongodb.net/EE461L_Project?retryWrites=true&w=majority"
@@ -330,7 +331,7 @@ def check_in_out():
 
 
 if __name__ == "__main__":
-     app.run(debug=True ,port=5000)
+     app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))
 
 
 
