@@ -16,7 +16,7 @@ app.config["MONGO_URI"] = "mongodb+srv://username:12345678910@tanyasprojects.cj0
 mongo = PyMongo(app)
 
 @app.route("/login/", methods=["GET","POST"], strict_slashes=False)
-@cross_origin()
+#@cross_origin()
 def log_in():
 
     user = request.json.get("user") # get the username from the frontend
@@ -47,7 +47,7 @@ def log_in():
 
 # this is for the signup route, we will do this stuff later
 @app.route("/signup/", methods=["GET","POST"], strict_slashes=False)
-@cross_origin()
+#@cross_origin()
 def sign_up():
     print("testing")
 
@@ -75,7 +75,7 @@ def sign_up():
         return jsonify(output="User already created")
 
 @app.route("/projects/", methods=["GET","POST"], strict_slashes=False)
-@cross_origin()
+#@cross_origin()
 def projects():
 
     projectID = request.json.get("projectID") 
@@ -168,7 +168,7 @@ def projects():
 ###################################################################################
 
 @app.route("/check-in-out/", methods=["GET","POST"], strict_slashes=False)
-@cross_origin()
+#@cross_origin()
 def check_in_out():
 
     # this lets us know whether we check in or check out
