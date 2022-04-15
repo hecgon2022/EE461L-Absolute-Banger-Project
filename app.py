@@ -1,5 +1,6 @@
 #simple testing to see if we can interface between
 #front end and backend
+from distutils.command.build import build
 from re import I
 import time
 import json
@@ -8,12 +9,17 @@ from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 from python.encryption import customEncrypt
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="./materialUIFrontEnd/build")
 #CORS(app)
 #client = pymongo.MongoClient("mongodb+srv://username:12345678910@tanyasprojects.cj00q.mongodb.net/EE461L_Project?retryWrites=true&w=majority")
 
 app.config["MONGO_URI"] = "mongodb+srv://username:12345678910@tanyasprojects.cj00q.mongodb.net/EE461L_Project?retryWrites=true&w=majority"
 mongo = PyMongo(app)
+
+@app.route("/")
+def index():
+    return app.send_static_file('index.html')
+
 
 @app.route("/login/", methods=["GET","POST"], strict_slashes=False)
 #@cross_origin()
