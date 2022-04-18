@@ -76,6 +76,15 @@ export default function Datasets() {
     setExpanded6(!expanded6);
   };
 
+  const [metaDesc1, setMetaDesc1] = useState('');
+  const [metaDesc2, setMetaDesc2] = useState('');
+  const [metaDesc3, setMetaDesc3] = useState('');
+  const [metaDesc4, setMetaDesc4] = useState('');
+  const [metaDesc5, setMetaDesc5] = useState('');
+  const [metaDesc6, setMetaDesc6] = useState('');
+
+  
+
   const on1Download = () => {
     const link = document.createElement("a");
     link.download = `data1.zip`;
@@ -87,6 +96,13 @@ export default function Datasets() {
     const link = document.createElement("a");
     link.download = `data1.zip`;
     link.href = "https://physionet.org/static/published-projects/cerebral-vasoreg-diabetes/cerebral-vasoregulation-in-diabetes-1.0.0.zip";
+    link.click();
+  };
+
+  const on3Download = () => {
+    const link = document.createElement("a");
+    link.download = `data1.zip`;
+    link.href = "https://physionet.org/static/published-projects/bpssrat/blood-pressure-in-salt-sensitive-dahl-rats-1.0.0.zip";
     link.click();
   };
 
@@ -111,7 +127,54 @@ export default function Datasets() {
     link.click();
   };
 
+  const handleMetadata = () => {
+
+      const requestOptions = {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          "url1": "https://physionet.org/content/physiozoo/1.0.0/", "url2": "https://physionet.org/content/cerebral-vasoreg-diabetes/1.0.0/", 
+          "url3": "https://physionet.org/content/bpssrat/1.0.0/", "url4": "https://physionet.org/content/unicaprop/1.0.0/", 
+          "url5": "https://physionet.org/content/chbmit/1.0.0/", "url6": "https://physionet.org/content/chfdb/1.0.0/" })
+      }
+
+      fetch("/metadata/", requestOptions)
+        .then(response =>
+          response.json()
+        )
+        .then(data => {
+          
+          console.log(data.output)
+          setMetaDesc1(data.output['url1'])
+          setMetaDesc2(data.output['url2'])
+          setMetaDesc3(data.output['url3'])
+          setMetaDesc4(data.output['url4'])
+          setMetaDesc5(data.output['url5'])
+          setMetaDesc6(data.output['url6'])
+        })
+
+        .catch(error => {
+          console.log(error)
+        })
+
+      //we have to then return the profile depending on the log in information here.
+      //this is the end of the if statement
+    
+  }
+
   return (
+
+    <>
+    <Button
+      id="login"
+      className={classes.button}
+      variant="contained"
+      style={{ fontSize: 18, maxHeight: 30 }}
+      onClick={handleMetadata}
+    >
+      Show Metadata
+    </Button>
+
     <Grid container spacing={3}>
       <Grid item xs={6} id="1">
         <Card elevation={2}>
@@ -127,6 +190,8 @@ export default function Datasets() {
           />
 
           <CardContent>
+            
+            
             <Typography variant="h6" color="textSecondary">
               The PhysioZoo database contains electrocardiographic recordings (ECG) 
               taken from multiple types of mammals (dogs, rabbits, mice). Each record is 
@@ -135,6 +200,7 @@ export default function Datasets() {
               (human corrected) R-peak annotations and the signal quality annotations. All of the files formats 
               are compatible with the PhysioZoo open source software available at physiozoo.com. When the recordings were 
               taken, all the mammals were conscious, and no drugs were administered prior to the recordings.
+              
             </Typography>
           </CardContent>
 
@@ -153,8 +219,8 @@ export default function Datasets() {
 
           <Collapse in={expanded1} timeout="auto" unmountOnExit>
             <CardContent>
-              <Typography variant="h1">
-                Metadata 1
+              <Typography variant="h6" color="textSecondary">
+                {metaDesc1}
               </Typography>
               
               <Button onClick={on1Download} variant="contained">
@@ -204,8 +270,8 @@ export default function Datasets() {
 
           <Collapse in={expanded2} timeout="auto" unmountOnExit>
             <CardContent>
-              <Typography variant="h1">
-                Metadata 2
+              <Typography variant="h6" color="textSecondary">
+                {metaDesc2}
               </Typography>
               
               <Button onClick={on2Download} variant="contained">
@@ -219,8 +285,8 @@ export default function Datasets() {
       <Grid item xs={6} id="3">
         <Card elevation={2}>
         <CardHeader 
-            title="Wide-Field Calcium Imaging Sleep State Database"
-            subheader="Published Mar. 17, 2022"
+              title="Blood Pressure in Salt-Sensitive Dahl Rats"
+              subheader="Published June 26, 2012"
           />
 
           <CardMedia
@@ -231,13 +297,7 @@ export default function Datasets() {
 
           <CardContent>
             <Typography variant="h6" color="textSecondary" >
-            A collection of wide-field calcium imaging (WFCI) sleep and wake recordings collected from twelve 
-            transgenic mice expressing GCaMP6f in excitatory neurons. Each mouse underwent a three-hour 
-            undisturbed WFCI recording session where wake, REM (rapid eye movement) sleep and NREM (non-REM) 
-            sleep was recorded. Each WFCI recording is manually scored by sleep scoring experts in 10-second 
-            epochs as wake, NREM or REM by use of adjunct EEG/EMG. The dataset contains annotated WFCI recordings, 
-            brain mask and the Paxinos atlas used for defining the brain regions. The dataset was collected as 
-            part of a study evaluating a deep learning-based automated sleep state classification method.
+            Salt-sensitive hypertension is known to be associated with dysfunction of the baroreflex control system in the Dahl salt-sensitive (SS) rat. However, neither the physiological mechanisms nor the genomic regions underlying the baroreflex dysfunction seen in this rat model are definitively known. Here, we have adopted a mathematical modeling approach to investigate the physiological and genetic origins of baroreflex dysfunction in the Dahl SS rat. We have developed a computational model of the overall baroreflex heart rate control system based on known physiological mechanisms to analyze telemetry-based blood pressure and heart rate data from two genetic strains of rat, the SS and consomic SS.13BN, on low- and high-salt diets. With this approach, physiological parameters are estimated, unmeasured physiological variables related to the baroreflex control system are predicted, and differences in these quantities between the two strains of rat on low- and high-salt diets are detected. Specific findings include: a significant selective impairment in sympathetic gain with high-salt diet in SS rats and a protection from this impairment in SS.13BN rats, elevated sympathetic and parasympathetic offsets with high-salt diet in both strains, and an elevated sympathetic tone with high-salt diet in SS but not SS.13BN rats. In conclusion, we have associated several important physiological parameters of the baroreflex control system with chromosome 13 and have begun to identify possible physiological mechanisms underlying baroreflex impairment and hypertension in the Dahl SS rat that may be further explored in future experimental and modeling-based investigation.
             </Typography>
           </CardContent>
 
@@ -256,11 +316,11 @@ export default function Datasets() {
 
           <Collapse in={expanded3} timeout="auto" unmountOnExit>
             <CardContent>
-              <Typography variant="h1">
-                Metadata 3
+              <Typography variant="h6" color="textSecondary">
+                {metaDesc3}
               </Typography>
               
-              <Button onClick={on2Download} variant="contained">
+              <Button onClick={on3Download} variant="contained">
                 Download Link
               </Button>
             </CardContent>
@@ -305,8 +365,8 @@ export default function Datasets() {
 
           <Collapse in={expanded4} timeout="auto" unmountOnExit>
             <CardContent>
-              <Typography variant="h1">
-                Metadata 4
+              <Typography variant="h6" color="textSecondary">
+                {metaDesc4}
               </Typography>
               
               <Button onClick={on4Download} variant="contained">
@@ -354,8 +414,8 @@ export default function Datasets() {
 
           <Collapse in={expanded5} timeout="auto" unmountOnExit>
             <CardContent>
-              <Typography variant="h1">
-                Metadata 5
+              <Typography variant="h6" color="textSecondary">
+                {metaDesc5}
               </Typography>
               
               <Button onClick={on5Download} variant="contained">
@@ -410,8 +470,8 @@ export default function Datasets() {
 
           <Collapse in={expanded6} timeout="auto" unmountOnExit>
             <CardContent>
-              <Typography variant="h1">
-                Metadata 6
+              <Typography variant="h6" color="textSecondary">
+                {metaDesc6}
               </Typography>
               
               <Button onClick={on6Download} variant="contained">
@@ -422,5 +482,6 @@ export default function Datasets() {
         </Card>
       </Grid>
     </Grid>
+    </>
   );
 }

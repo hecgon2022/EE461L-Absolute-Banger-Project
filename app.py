@@ -4,6 +4,7 @@ from distutils.command.build import build
 from re import I
 import time
 import json
+import metadata_parser
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
@@ -328,6 +329,50 @@ def check_in_out():
             return jsonify({
                 "output": hwSets
             })
+# for the metadata route
+@app.route("/metadata/", methods=["GET","POST"], strict_slashes=False)
+#@cross_origin()
+def metadata():
+
+    url1 = request.json.get("url1") # get the url from the frontend
+    url2 = request.json.get("url2") # get the url from the frontend
+    url3 = request.json.get("url3") # get the url from the frontend
+    url4 = request.json.get("url4") # get the url from the frontend
+    url5 = request.json.get("url5") # get the url from the frontend
+    url6 = request.json.get("url6") # get the url from the frontend
+
+    page1 = metadata_parser.MetadataParser(url1)
+    page2 = metadata_parser.MetadataParser(url2)
+    page3 = metadata_parser.MetadataParser(url3)
+    page4 = metadata_parser.MetadataParser(url4)
+    page5 = metadata_parser.MetadataParser(url5)
+    page6 = metadata_parser.MetadataParser(url6)
+
+    print(page3.metadata)
+
+    
+    description1 = page1.get_metadatas('description') 
+    description2 = page2.get_metadatas('description') 
+    description3 = page3.get_metadatas('title') 
+    description4 = page4.get_metadatas('description') 
+    description5 = page5.get_metadatas('description') 
+    description6 = page6.get_metadatas('description') 
+
+    print(description3)
+
+
+    urlDict = {
+        "url1": description1,
+        "url2": description2,
+        "url3": description3,
+        "url4": description4,
+        "url5": description5,
+        "url6": description6
+    }
+
+    return jsonify({
+         "output": urlDict
+    })
 
 
 if __name__ == "__main__":
